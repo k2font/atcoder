@@ -33,12 +33,36 @@ int vector_finder(std::vector<ll> vec, int number) {
     return 0;
   }
 }
-
+unsigned int btoui(const std::string& bin) {
+    return strtoul(bin.c_str(), NULL, 2);
+}
 int main() {
-  string N; cin >> N;
-  string ans = "No";
-  REP(i, 3) {
-    if(N[i] == '7') ans = "Yes";
+  int N; cin >> N;
+  string X; cin >> X;
+  REP(i, N) {
+    int ans = 0;
+    string tmp = X;
+    if(tmp[i] == '1') tmp[i] = '0';
+    else tmp[i] = '1';
+    while(true) {
+      int cnt = __builtin_popcount(btoui(tmp)); // 割る数を用意
+      string res = ""; // 割られる数を用意
+      REP(i, N) {
+        res += tmp[i];
+        if(btoui(res) >= cnt) {
+          int t = btoui(res) - cnt;
+          stringstream ss;
+          ss << bitset<16>(t);
+          res = ss.str();
+        }
+      }
+      if(btoui(res) == 0) {
+        cout << ans + 1 << endl;
+        break;
+      } else {
+        ans++;
+      }
+      tmp = res;
+    }
   }
-  cout << ans << endl;
 }

@@ -35,10 +35,15 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  string N; cin >> N;
-  string ans = "No";
-  REP(i, 3) {
-    if(N[i] == '7') ans = "Yes";
+  int N; cin >> N;
+  vector<int> a(N); REP(i, N) cin >> a[i];
+  int ans = 0;
+  REP(i, N) {
+    if((i + 1) % 2 == 1) {
+      if(a[i] % 2 == 1) {
+        ans++;
+      }
+    }
   }
   cout << ans << endl;
 }

@@ -74,5 +74,13 @@
         "typeinfo": "cpp",
         "valarray": "cpp",
         "variant": "cpp"
-    }
+    },
+    "gitlens.currentLine.enabled": false,
+    "gitlens.hovers.currentLine.over": "line",
+    "gitlens.statusBar.enabled": false,
+    "gitlens.hovers.enabled": false,
+    "gitlens.views.repositories.enabled": false,
+    "gitlens.views.fileHistory.enabled": false,
+    "gitlens.views.search.enabled": false,
+    "gitlens.views.lineHistory.enabled": false
 }

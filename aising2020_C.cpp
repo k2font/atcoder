@@ -35,10 +35,30 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  string N; cin >> N;
-  string ans = "No";
-  REP(i, 3) {
-    if(N[i] == '7') ans = "Yes";
+  int N; cin >> N;
+  for(int i = 1; i <= N; ++i) {
+    int ans = 0;
+    bool flag = false;
+    for(int k = 1; k <= 100; ++k) {
+      int x = k * k;
+      for(int m = 1; m <= 100; ++m) {
+        int y = m * m;
+        ll res = x + y + (k * m);
+        if(res > i) {
+          break;
+        }
+        for(int l = 1; l <= 100; ++l) {
+          int z = l * l;
+          ll tmp = x + y + z + (k * m) + (m * l) + (l * k);
+          if(tmp > i) {
+            break;
+          }
+          if(i == tmp) {
+            ans++;
+          }
+        }
+      }
+    }
+    cout << ans << endl;
   }
-  cout << ans << endl;
 }
