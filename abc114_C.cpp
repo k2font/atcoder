@@ -24,23 +24,38 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
-
-int N;
-void dfs(ll cur, int use, ll &counter) {
-  if(cur > N) return; // 終了条件
-  if(use == 0b111) {
-    // cout << cur << endl;
-    ++counter; // 7, 5, 3のうち、それまでどれを含めたか?
+int vector_finder(std::vector<ll> vec, int number) {
+  auto itr = std::find(vec.begin(), vec.end(), number);
+  size_t index = std::distance( vec.begin(), itr );
+  if (index != vec.size()) { // 発見できたとき
+    return 1;
   }
+  else { // 発見できなかったとき
+    return 0;
+  }
+}
 
-  dfs(cur * 10 + 7, use | 0b001, counter);
-  dfs(cur * 10 + 5, use | 0b010, counter);
-  dfs(cur * 10 + 3, use | 0b100, counter);
+ll N;
+vector<string> ans;
+void dfs(string s) {
+  if(stoll(s) > N) return;
+  if(s.size() > 10) return;
+  if(s.size() <= 10 && s.size() > 2) {
+    bool flag = false;
+    map<char, int> m; m['3'] = 0; m['5'] = 0; m['7'] = 0;
+    REP(i, s.size()) m[s[i]]++;
+    if(m['3'] > 0 && m['5'] > 0 && m['7'] > 0) flag = true;
+    if(flag == true) ans.push_back(s);
+  }
+  dfs(s + "3");
+  dfs(s + "5");
+  dfs(s + "7");
 }
 
 int main() {
   cin >> N;
-  ll res = 0;
-  dfs(0, 0, res);
-  cout << res << endl;
+  dfs("3");
+  dfs("5");
+  dfs("7");
+  cout << ans.size() << endl;
 }

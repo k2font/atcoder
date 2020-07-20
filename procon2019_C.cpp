@@ -36,15 +36,23 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-    ll K, A, B; cin >> K >> A >> B;
-    if(A >= B) {
-        cout << K + 1 << endl;
-    } else {
-        if(B - A <= 2) {
-          cout << K + 1 << endl;
-        } else if(B - A >= 3) {
-          ll ans = (K / (A + 2)) * B + (K % (A + 2)) + 1;
-          cout << ans << endl;
-        }
+  ll K, A, B; cin >> K >> A >> B;
+  ll ans = 1;
+  if(A > B) {
+    ans += K;
+    cout << ans << endl;
+  } else {
+    if(B - A <= 2) {
+      ans += K;
+      cout << ans << endl;
+    } else if(B - A > 2) {
+      ans += (A - 1); K -= (A - 1);
+      while(K > 1) {
+        K -= 2;
+        ans += (B - A);
+      }
+      if(K == 0) cout << ans << endl;
+      else if(K > 0) cout << ans + K << endl;
     }
+  }
 }

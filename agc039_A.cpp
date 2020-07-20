@@ -36,5 +36,24 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  
+  string S; cin >> S;
+  ll K; cin >> K;
+  string T; T = S + S;
+  ll cnt = 0;
+  REP(i, T.size()) {
+    if(i == 0) {
+      if(T[0] == T[T.size() - 1]) {
+        T[T.size() - 1] = '@';
+        cnt++;
+      }
+    }
+    if(T[i - 1] == T[i]) {
+      T[i] = '@';
+      cnt++;
+    }
+  }
+  ll ans = 0;
+  if(K % 2 == 0) ans = cnt * (K / 2);
+  else if(K % 2 == 1) ans = cnt * (K / 2) + cnt / 2;
+  cout << ans << endl;
 }

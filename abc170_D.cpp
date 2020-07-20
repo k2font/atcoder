@@ -35,48 +35,23 @@ int vector_finder(std::vector<ll> vec, int number) {
   }
 }
 
-map< int, int > prime_factor(int n) {
-  map< int, int > ret;
-  for(int i = 2; i * i <= n; i++) {
-    while(n % i == 0) {
-      ret[i]++;
-      n /= i;
-    }
-  }
-  if(n != 1) ret[n] = 1;
-  return ret;
-}
-
 int main() {
   int N; cin >> N;
   vector<int> A(N); REP(i, N) cin >> A[i];
+  vector<int> dp(1000010, 0);
   sort(all(A));
-  map<int, int> m;
-  int ans = 0;
-  for(int i = 0; i < N; ++i) {
-    bool flag = false;
-    for(auto a : m) {
-      if(A[i] % a.first == 0) {
-        flag = true;
-        break;
-      }
+  REP(i, N) {
+    if(dp[A[i]] > 1) continue;
+    for(int k = A[i]; k < 1000010; k += A[i]) {
+      dp[k]++;
+      if(k > A[N - 1]) break; 
     }
-    if(flag == false) {
+  }
+  int ans = 0;
+  REP(i, N) {
+    if(dp[A[i]] == 1) {
       ans++;
     }
-
-    auto x = prime_factor(A[i]);
-    for(auto a : x) {
-      m[a.first]++;
-    
-    for(auto a : m) {
-      cout << a.first << " ";
-    }
-    cout << endl;
   }
-  if(A[N - 1] - A[0] == 0) {
-    cout << 0 << endl;
-  } else {
-    cout << ans << endl;
-  }
+  cout << ans << endl;
 }

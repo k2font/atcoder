@@ -5,15 +5,46 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 string char_to_string(char val) {
-    return string(1, val);
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+int vector_finder(std::vector<ll> vec, int number) {
+  auto itr = std::find(vec.begin(), vec.end(), number);
+  size_t index = std::distance( vec.begin(), itr );
+  if (index != vec.size()) { // 発見できたとき
+    return 1;
+  }
+  else { // 発見できなかったとき
+    return 0;
+  }
 }
 
-int main(){
-    int N; cin >> N;
-    vector<int> a(N); REP(i,N) cin >> a[i];
-
-    int max_n = *max_element(all(a));
-    int min_n = *min_element(all(a));
-
-    cout << max_n - min_n << endl;
+int main() {
+  int N; cin >> N;
+  vector<int> P(N); REP(i, N) cin >> P[i];
+  int max_n = pow(10, 9);
+  int ans = 0;
+  REP(i, N) {
+      if(max_n > P[i]) {
+          ans++;
+          max_n = P[i];
+      }
+  }
+  cout << ans << endl;
 }

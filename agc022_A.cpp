@@ -36,39 +36,35 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  int N, M; cin >> N >> M;
   string S; cin >> S;
-  vector<int> tmp; int res = 1;
-  REP(i, N + 1) {
-    if(i == 0) continue;
-    if(S[i] == '0') {
-      tmp.push_back(res);
-      res = 1;
+  map<char, int> m;
+  REP(i, S.size()) m[S[i]]++;
+  char tmp = 'a' - 1; char ans; int cnt = 0; bool sw = false;
+  for(auto x : m) {
+    cnt++;
+    if(x.first - tmp == 1) {
+      tmp = x.first;
+      continue;
     } else {
-      res++;
+      ans = tmp + 1;
+      sw = true;
+      break;
     }
   }
-  int ans = 0;
-  REP(i, tmp.size()) {
-    if(tmp[i] > M) ans = -1;
-  }
-  if(ans == -1) {
-    cout << ans << endl;
+  if(m.size() == 26) {
+    if(S[S.size() - 1] == 'z') {
+      cout << "Z!!!!" << endl;
+    } else {
+      S[S.size() - 2] = S[S.size() - 2] + 1;
+      S.pop_back();
+      cout << S << endl;
+    }
   } else {
-    int a = 0;
-    vector<int> ans2;
-    for(int i = tmp.size() - 1; i >= 0; --i) {
-      if(a + tmp[i] <= M) a += tmp[i];
-      else {
-        ans2.push_back(a);
-        a = 0; a += tmp[i];
-      }
-      if(i == 0) ans2.push_back(a);
+    if(sw == false) {
+      char a = S[S.size() - 1] + 1;
+      cout << S + a << endl;
+    } else {
+      cout << S + ans << endl;
     }
-    for(int i = ans2.size() - 1; i >= 0; --i) {
-      cout << ans2[i] << " ";
-    }
-    cout << endl;
   }
-  
 }

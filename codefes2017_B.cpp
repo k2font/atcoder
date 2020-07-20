@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
@@ -36,39 +35,13 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  int N, M; cin >> N >> M;
   string S; cin >> S;
-  vector<int> tmp; int res = 1;
-  REP(i, N + 1) {
-    if(i == 0) continue;
-    if(S[i] == '0') {
-      tmp.push_back(res);
-      res = 1;
-    } else {
-      res++;
-    }
+  map<char, int> m;
+  REP(i, S.size()) m[S[i]]++;
+  int check = ceil(S.size() / 3.0) + 1;
+  string ans = "YES";
+  for(auto x : m) {
+    if(x.second >= check) ans = "NO";
   }
-  int ans = 0;
-  REP(i, tmp.size()) {
-    if(tmp[i] > M) ans = -1;
-  }
-  if(ans == -1) {
-    cout << ans << endl;
-  } else {
-    int a = 0;
-    vector<int> ans2;
-    for(int i = tmp.size() - 1; i >= 0; --i) {
-      if(a + tmp[i] <= M) a += tmp[i];
-      else {
-        ans2.push_back(a);
-        a = 0; a += tmp[i];
-      }
-      if(i == 0) ans2.push_back(a);
-    }
-    for(int i = ans2.size() - 1; i >= 0; --i) {
-      cout << ans2[i] << " ";
-    }
-    cout << endl;
-  }
-  
+  cout << ans << endl;
 }

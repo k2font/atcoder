@@ -35,10 +35,24 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  string N; cin >> N;
-  string ans = "No";
-  REP(i, 3) {
-    if(N[i] == '7') ans = "Yes";
+  int N; cin >> N;
+  vector<pair<ll, ll>> p;
+  REP(i, N) {
+    ll x, y; cin >> x >> y;
+    p.push_back(make_pair(x, y));
   }
-  cout << ans << endl;
+  sort(all(p));
+  map<pair<ll, ll>, ll> m;
+  REP(i, N) {
+    REP(k, N) {
+      if(i == k) continue;
+      auto x = make_pair(p[i].first - p[k].first, p[i].second - p[k].second);
+      m[x]++;
+    }
+  }
+  ll a = 0;
+  for(auto x : m) {
+    if(a < x.second) a = x.second;
+  }
+  cout << N - a << endl;
 }

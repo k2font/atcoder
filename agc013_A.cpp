@@ -38,29 +38,37 @@ int vector_finder(std::vector<ll> vec, int number) {
 int main() {
   int N; cin >> N;
   vector<ll> A(N); REP(i, N) cin >> A[i];
-  vector<int> ans(N - 1);
+  bool flag = false;
+  bool s = false;
+  int ans = 0;
   REP(i, N - 1) {
-    if(A[i + 1] - A[i] > 0) ans[i] = 1;
-    else if(A[i + 1] - A[i] == 0) ans[i] = 0;
-    else if(A[i + 1] - A[i] < 0) ans[i] = -1;
-  }
-
-  int tmp = 0;
-  int cnt = 0;
-  REP(i, N - 1) {
-    if(i == 0) {
-      cnt++;
-      tmp = ans[i];
-      continue;
+    if(s == false) {
+      if(A[i] < A[i + 1]) {
+        flag = true;
+        s = true;
+        continue;
+      }
+      else if(A[i] > A[i + 1]) {
+        flag = false;
+        s = true;
+        continue;
+      }
+      else if(A[i] == A[i + 1]) {
+        continue;
+      }
+      s = true;
     }
-    if(tmp != ans[i] && ans[i] != 0) {
-      if(tmp != ans[i + 1]) {
-        cnt++;
-        tmp = ans[i];
-      } else {
-        tmp = ans[i];
+    if(flag == true) {
+      if(A[i] > A[i + 1]) {
+        ans++;
+        s = false;
+      }
+    } else {
+      if(A[i] < A[i + 1]) {
+        ans++;
+        s = false;
       }
     }
   }
-  cout << cnt << endl;
+  cout << ans + 1 << endl;
 }

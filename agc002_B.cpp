@@ -37,38 +37,30 @@ int vector_finder(std::vector<ll> vec, int number) {
 
 int main() {
   int N, M; cin >> N >> M;
-  string S; cin >> S;
-  vector<int> tmp; int res = 1;
+  vector<int> box(N + 1, 1);
+  vector<bool> ans(N + 1);
   REP(i, N + 1) {
     if(i == 0) continue;
-    if(S[i] == '0') {
-      tmp.push_back(res);
-      res = 1;
-    } else {
-      res++;
-    }
+    if(i == 1) ans[i] = true;
+    else ans[i] = false;
   }
-  int ans = 0;
-  REP(i, tmp.size()) {
-    if(tmp[i] > M) ans = -1;
-  }
-  if(ans == -1) {
-    cout << ans << endl;
-  } else {
-    int a = 0;
-    vector<int> ans2;
-    for(int i = tmp.size() - 1; i >= 0; --i) {
-      if(a + tmp[i] <= M) a += tmp[i];
-      else {
-        ans2.push_back(a);
-        a = 0; a += tmp[i];
+  REP(i, M) {
+    int x, y; cin >> x >> y;
+    if(ans[x] == true) {
+      if(box[x] > 1) {
+        ans[x] = true;
+        ans[y] = true;
+      } else if(box[x] == 1) {
+        ans[x] = false;
+        ans[y] = true;
       }
-      if(i == 0) ans2.push_back(a);
     }
-    for(int i = ans2.size() - 1; i >= 0; --i) {
-      cout << ans2[i] << " ";
-    }
-    cout << endl;
+    box[x]--;
+    box[y]++;
   }
-  
+  int res = 0;
+  REP(i, N + 1) {
+    if(ans[i] == true) res++;
+  }
+  cout << res << endl;
 }
