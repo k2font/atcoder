@@ -35,23 +35,17 @@ int vector_finder(std::vector<ll> vec, int number) {
   }
 }
 
-int digit(int n) {
-  int res = 0;
-  while(n >= 1) {
-    res += (n % 10);
-    n /= 10;
-  }
-  return res;
-}
-
 int main() {
   int N; cin >> N;
-  int ans = pow(10, 9) + 10;
-  int a, b;
-  for(int i = 1; i < N; ++i) {
-    a = i; b = N - i;
-    int res = digit(a) + digit(b);
-    if(ans > res) ans = res;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  sort(all(A), greater<int>());
+  ll ans = 0; int cnt = 0;
+  REP(i, N / 2) {
+    if(i == 0) ans += A[i];
+    else ans += A[i] * 2;
+  }
+  if(N % 2 == 1) {
+    ans += A[N / 2];
   }
   cout << ans << endl;
 }

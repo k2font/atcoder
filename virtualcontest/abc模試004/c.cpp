@@ -36,38 +36,27 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  int H, W, K; cin >> H >> W >> K;
-  vector<string> c(H); REP(i, H) cin >> c[i];
-  vector<string> copy(H); copy = c;
-  int ans = 0;
-  for(int bit1 = 0; bit1 < (1 << H); ++bit1) {
-    for(int bit2 = 0; bit2 < (1 << W); ++bit2) {
-
-      for(int i = 0; i < H; ++i) {
-        if(bit1 & (1 << i)) {
-          REP(k, W) {
-            copy[i][k] = '@';
-          }
-        }
-      }
-
-      for(int i = 0; i < W; ++i) {
-        if(bit2 & (1 << i)) {
-          REP(k, H) {
-            copy[k][i] = '@';
-          }
-        }
-      }
-
-      int tmp = 0;
-      REP(i, H) {
-        REP(k, W) {
-          if(copy[i][k] == '#') tmp++;
-        }
-      }
-      if(tmp == K) ans++;
-      copy = c;
+  int N, M; cin >> N >> M;
+  vector<int> a(N + 1, 0);
+  REP(i, M) {
+    int b; cin >> b;
+    a[b] = 1;
+  }
+  const ll MOD = pow(10, 9) + 7;
+  vector<int> dp(N + 1, 0);
+  REP(i, N + 1) {
+    if(i == 0) {
+      dp[i] = 1;
+      continue;
+    }
+    if(a[i] == 1) {
+      dp[i] = 0;
+      continue;
+    } else {
+      if(i - 1 >= 0) dp[i] += dp[i - 1];
+      if(i - 2 >= 0) dp[i] += dp[i - 2];
+      dp[i] %= MOD;
     }
   }
-  cout << ans << endl;
+  cout << dp[N] << endl;
 }

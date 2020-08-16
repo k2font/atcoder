@@ -34,31 +34,24 @@ int vector_finder(std::vector<ll> vec, int number) {
     return 0;
   }
 }
+struct edge {
+  ll to, cost;
+};
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<int> p(M); vector<string> S(M);
-  REP(i, M) cin >> p[i] >> S[i];
-  vector<vector<int>> tmp(N, vector<int>(2));
-  REP(i, N) {
-    tmp[i][0] = 0;
-    tmp[i][1] = 0;
-  }
+  ll N, M; cin >> N >> M;
+  vector<pair<int, int>> ans(N + 1); // 提出数と0, 1の正解か不正解か
   REP(i, M) {
-    if(tmp[p[i] - 1][1] == 0 && S[i] == "WA") {
-      tmp[p[i] - 1][0]++;
-    }
-    if(S[i] == "AC") {
-      tmp[p[i] - 1][1] = 1;
+    int p; string S; cin >> p >> S;
+    if(S == "WA" && ans[p].second == 0) ans[p].first++;
+    else if(S == "AC") ans[p].second = 1;
+  }
+  ll res = 0; ll pena = 0;
+  REP(i, N + 1) {
+    if(ans[i].second == 1) {
+      res++;
+      pena += ans[i].first;
     }
   }
-  ll ans = 0;
-  ll res = 0;
-  REP(i, N) {
-    if(tmp[i][1] == 1) {
-      ans++;
-      res += tmp[i][0];
-    }
-  }
-  cout << ans << " " << res << endl;
+  cout << res << " " << pena << endl;
 }

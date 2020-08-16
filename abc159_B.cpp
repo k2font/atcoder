@@ -24,7 +24,7 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
-int vector_finder(std::vector<int> vec, int number) {
+int vector_finder(std::vector<ll> vec, int number) {
   auto itr = std::find(vec.begin(), vec.end(), number);
   size_t index = std::distance( vec.begin(), itr );
   if (index != vec.size()) { // 発見できたとき
@@ -34,24 +34,23 @@ int vector_finder(std::vector<int> vec, int number) {
     return 0;
   }
 }
+struct edge {
+  ll to, cost;
+};
 
 int main() {
-  string S; cin >> S;
+  string S; cin >> S; int N = S.size();
+  string s1 = S.substr(0, (S.size() - 1) / 2);
+  string s2 = S.substr((S.size() + 3) / 2 - 1, s1.size());
+  reverse(s2.begin(), s2.end());
   string ans = "Yes";
-  string a = S.substr(0, (S.size() - 1) / 2);
-  string b = S.substr((S.size() + 3) / 2 - 1, (S.size() - 1) / 2);
-
-  for(int i = 0; i < a.size()/2; ++i) {
-    if(a[i] != a[a.size() - i - 1]) ans = "No";
+  if(s1 != s2) ans = "No";
+  reverse(s2.begin(), s2.end());
+  for(int i = 0; i < s1.size(); ++i) {
+    if(s1[i] != s1[s1.size() - i - 1]) ans = "No";
   }
-
-  for(int i = 0; i < b.size()/2; ++i) {
-    if(b[i] != b[b.size() - i - 1]) ans = "No";
+  for(int i = 0; i < s2.size(); ++i) {
+    if(s2[i] != s2[s2.size() - i - 1]) ans = "No";
   }
-
-  for(int i = 0; i < S.size()/2; ++i) {
-    if(S[i] != S[S.size() - i - 1]) ans = "No";
-  }
-
   cout << ans << endl;
 }

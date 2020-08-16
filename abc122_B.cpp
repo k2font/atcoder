@@ -37,18 +37,15 @@ int vector_finder(std::vector<ll> vec, int number) {
 
 int main() {
   string S; cin >> S;
-  ll ans = 0;
-  ll cnt = 0;
-  for(int i = 0; i < S.size(); ++i) {
+  int ans = 0; int tmp = 0;
+  REP(i, S.size()) {
     if(S[i] == 'A' || S[i] == 'T' || S[i] == 'G' || S[i] == 'C') {
-      cnt++;
+      tmp++;
     } else {
-      if(ans < cnt) ans = cnt;
-      cnt = 0;
+      if(ans < tmp) ans = tmp;
+      tmp = 0;
     }
-    if(i == S.size() - 1) {
-      if(ans < cnt) ans = cnt;
-    }
-  }
+  } 
+  if(ans < tmp) ans = tmp;
   cout << ans << endl;
 }

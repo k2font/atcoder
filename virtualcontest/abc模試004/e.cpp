@@ -35,40 +35,52 @@ int vector_finder(std::vector<ll> vec, int number) {
   }
 }
 
+vector<bool> flag;
+vector<int> ans;
+vector<vector<int>> tree;
+int N, K;
+const ll MOD = pow(10, 9) + 7;
+
+void dfs(int start, int p, int dist) {
+  if(start == p) {
+    REP(i, N + 1) {
+      flag[i] = false;
+    }
+  }
+  flag[p] = true;
+  if(dist == 3) return; // 距離が2ならそれ以上探索しない
+  if(dist != 0) {
+    if(ans[p] != pow(10, 9)) ans[start] = min(ans[start], max(ans[p] - 1, 1));
+  }
+  for(int i = 0; i < tree[p].size(); ++i) {
+    if(flag[tree[p][i]] == true) continue;
+    dfs(start, tree[p][i], dist + 1);
+  }
+}
+
 int main() {
-  int N, M; cin >> N >> M;
-  string S; cin >> S;
-  vector<int> tmp; int res = 1;
+  cin >> N >> K;
+  tree.resize(N + 1);
+  ans.resize(N + 1, pow(10, 9));
+  flag.resize(N + 1, false);
+  REP(i, N - 1) {
+    int a, b; cin >> a >> b;
+    tree[a].push_back(b);
+    tree[b].push_back(a);
+  }
+
+  // DFS
+  ans[1] = K;
+  for(int i = 1; i <= N; ++i) {
+    dfs(i, i, 0);
+  }
+
+  // 答え計算
+  ll res = 1;
   REP(i, N + 1) {
     if(i == 0) continue;
-    if(S[i] == '0') {
-      tmp.push_back(res);
-      res = 1;
-    } else {
-      res++;
-    }
+    res *= ans[i];
+    res %= MOD;
   }
-  int ans = 0;
-  REP(i, tmp.size()) {
-    if(tmp[i] > M) ans = -1;
-  }
-  if(ans == -1) {
-    cout << ans << endl;
-  } else {
-    int a = 0;
-    vector<int> ans2;
-    for(int i = tmp.size() - 1; i >= 0; --i) {
-      if(a + tmp[i] <= M) a += tmp[i];
-      else {
-        ans2.push_back(a);
-        a = 0; a += tmp[i];
-      }
-      if(i == 0) ans2.push_back(a);
-    }
-    for(int i = ans2.size() - 1; i >= 0; --i) {
-      cout << ans2[i] << " ";
-    }
-    cout << endl;
-  }
-  
+  cout << res << endl;
 }

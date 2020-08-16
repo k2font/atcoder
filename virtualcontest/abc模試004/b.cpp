@@ -36,15 +36,34 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-  int N; cin >> N;
-  vector<int> P(N); REP(i, N) cin >> P[i];
-  int max_n = pow(10, 9);
-  int ans = 0;
-  REP(i, N) {
-      if(max_n > P[i]) {
-          ans++;
-          max_n = P[i];
+  string S; cin >> S;
+  ll ans = 0; int cnt = 0;
+  REP(i, S.size() - 1) {
+    if(S[i] == '2' && S[i + 1] == '5') {
+      cnt++;
+    }
+    else if(S[i] == '5' && S[i + 1] == '2') {
+      // スルー
+    } else {
+      int res = 0;
+      while(true) {
+        if(cnt == 0) break;
+        res += cnt;
+        cnt--;
       }
+      ans += res;
+      cnt = 0;
+    }
+
+    if(i == S.size() - 2) {
+      int res = 0;
+      while(true) {
+        if(cnt == 0) break;
+        res += cnt;
+        cnt--;
+      }
+      ans += res;
+    }
   }
   cout << ans << endl;
 }

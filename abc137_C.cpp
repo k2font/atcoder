@@ -4,24 +4,47 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+int vector_finder(std::vector<ll> vec, int number) {
+  auto itr = std::find(vec.begin(), vec.end(), number);
+  size_t index = std::distance( vec.begin(), itr );
+  if (index != vec.size()) { // 発見できたとき
+    return 1;
+  }
+  else { // 発見できなかったとき
+    return 0;
+  }
+}
 
-int main(){
-    long long N; cin >> N;
-    vector<string> s(N); REP(i, N) cin >> s[i];
-
-    map<string, long long> um;
-
-    // まずは要素ごとにソートする
-    long long result = 0;
-    REP(i, N) {
-        sort(s[i].begin(), s[i].end());
-        if(um[s[i]] > 0) {
-            result += um[s[i]];
-            um[s[i]]++;
-        } else {
-            um[s[i]] = 1;
-        }
-    }
-
-    cout << result << endl;
+int main() {
+  int N; cin >> N;
+  vector<string> s(N); REP(i, N) cin >> s[i];
+  REP(i, N) sort(all(s[i]));
+  map<string, ll> m;
+  REP(i, N) m[s[i]]++;
+  ll ans = 0;
+  for(auto x : m) {
+    ll tmp = x.second * (x.second - 1) / 2;
+    ans += tmp;
+  }
+  cout << ans << endl;
 }

@@ -24,24 +24,25 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
-
-vector<int> buf;
-vector<int> tmp = {100, 101, 102, 103, 104, 105};
+int vector_finder(std::vector<ll> vec, int number) {
+  auto itr = std::find(vec.begin(), vec.end(), number);
+  size_t index = std::distance( vec.begin(), itr );
+  if (index != vec.size()) { // 発見できたとき
+    return 1;
+  }
+  else { // 発見できなかったとき
+    return 0;
+  }
+}
 
 int main() {
   int X; cin >> X;
-
-  // DPで解く
-  int dp[X + 1000];
-  dp[0] = 1;
-  dp[1] = 0;
-  int a[6] = {100, 101, 102, 103, 104, 105};
-
-  for(int i = 0; i < 6; ++i) {
-    for(int k = 0; k < X; ++k) {
-      if(dp[k] == 1) dp[k + a[i]] = 1;
+  int ans = 0;
+  for(int i = 0; i < X; ++i) {
+    if(100 * i <= X && X <= 105 * i) {
+      ans = 1;
+      break;
     }
   }
-
-  cout << dp[X] << endl;
+  cout << ans << endl;
 }

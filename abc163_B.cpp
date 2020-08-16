@@ -5,22 +5,43 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 string char_to_string(char val) {
-    return string(1, val);
+  return string(1, val);
 }
 int char_to_int(char val) {
-    return val - '0';
+  return val - '0';
 }
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+int vector_finder(std::vector<ll> vec, int number) {
+  auto itr = std::find(vec.begin(), vec.end(), number);
+  size_t index = std::distance( vec.begin(), itr );
+  if (index != vec.size()) { // 発見できたとき
+    return 1;
+  }
+  else { // 発見できなかったとき
+    return 0;
+  }
+}
+struct edge {
+  ll to, cost;
+};
 
 int main() {
-    int N, M; cin >> N >> M;
-    vector<int> A(M); REP(i, M) cin >> A[i];
-
-    ll sum_num = accumulate(all(A), 0LL);
-
-    ll ans = N - sum_num;
-    if(ans < 0) {
-      cout << -1 << endl;
-    } else if(ans >= 0) {
-      cout << ans << endl;
-    }
+  ll N, M; cin >> N >> M;
+  vector<ll> A(M); REP(i, M) cin >> A[i];
+  ll ans = accumulate(all(A), 0LL);
+  if(ans <= N) cout << N - ans << endl;
+  else cout << -1 << endl;
 }

@@ -24,18 +24,25 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
+int vector_finder(std::vector<ll> vec, int number) {
+  auto itr = std::find(vec.begin(), vec.end(), number);
+  size_t index = std::distance( vec.begin(), itr );
+  if (index != vec.size()) { // 発見できたとき
+    return 1;
+  }
+  else { // 発見できなかったとき
+    return 0;
+  }
+}
+struct edge {
+  ll to, cost;
+};
 
 int main() {
-  int K; cin >> K;
-  int A, B; cin >> A >> B;
-
-  string str = "NG";
-  int k = 0;
-  while(true) {
-    k = k + K;
-    if(A <= k && k <= B) str = "OK";
-    if(k >= 1000) break;
+  int K, A, B; cin >> K >> A >> B;
+  string ans = "NG";
+  for(int i = A; i <= B; ++i) {
+    if(i % K == 0) ans = "OK";
   }
-
-  cout << str << endl;
+  cout << ans << endl;
 }
