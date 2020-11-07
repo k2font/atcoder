@@ -4,6 +4,7 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+using P = pair<ll, ll>;
 string char_to_string(char val) {
   return string(1, val);
 }
@@ -24,27 +25,14 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
-int vector_finder(std::vector<ll> vec, int number) {
-  auto itr = std::find(vec.begin(), vec.end(), number);
-  size_t index = std::distance( vec.begin(), itr );
-  if (index != vec.size()) { // 発見できたとき
-    return 1;
-  }
-  else { // 発見できなかったとき
-    return 0;
-  }
-}
 struct edge {
   ll to, cost;
 };
 
 int main() {
   int N, K; cin >> N >> K;
-  vector<int> A(N); REP(i, N) cin >> A[i];
-  sort(all(A));
-  int ans = 0;
-  for(int i = 0; i < K; ++i) {
-    ans += A[i];
-  }
+  vector<int> p(N); REP(i, N) cin >> p[i];
+  int ans = 0; sort(all(p));
+  REP(i, K) ans += p[i];
   cout << ans << endl;
 }

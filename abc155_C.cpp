@@ -1,49 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-    int N; cin >> N;
-    vector<string> S(N); for(int i = 0; i < N; ++i) cin >> S[i];
+#define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
+#define all(x) (x).begin(),(x).end()
+using ll = long long;
+using P = pair<ll, ll>;
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+struct edge {
+  ll to, cost;
+};
 
-    int cnt = 1;
-    int rep_cnt = 0;
-    int max_n = 0;
-    vector<pair<string, int>> a(N);
-
-    sort(S.begin(), S.end());
-
-    for(int i = 1; i < N; ++i) {
-        if(i == N - 1) {
-            if(S.at(i - 1) == S.at(i)) {
-                cnt++;
-                a[rep_cnt] = make_pair(S.at(i - 1), cnt);
-                rep_cnt++;
-            } else {
-                a[rep_cnt] = make_pair(S.at(i - 1), cnt);
-                rep_cnt++;
-                a[rep_cnt] = make_pair(S.at(i), 1);
-                rep_cnt++;
-            }
-            if(max_n < cnt) {
-                max_n = cnt;
-            }
-        } else {
-            if(S.at(i - 1) == S.at(i)) {
-                cnt++;
-            } else {
-                a[rep_cnt] = make_pair(S.at(i - 1), cnt);
-                rep_cnt++;
-                if(max_n < cnt) {
-                    max_n = cnt;
-                }
-                cnt = 1;
-            }
-        }
-    }
-
-    for(int i = 0; i < rep_cnt; ++i) {
-        if(a[i].second == max_n) {
-            cout << a[i].first << endl;
-        }
-    }
+int main() {
+  ll N; cin >> N;
+  vector<string> S(N); REP(i, N) cin >> S[i];
+  map<string, int> m;
+  REP(i, N) m[S[i]]++;
+  vector<string> ans; int res = 0;
+  for(auto x : m) if(res < x.second) res = x.second;
+  for(auto x : m) {
+    if(x.second == res) ans.push_back(x.first);
+  }
+  sort(all(ans));
+  REP(i, ans.size()) {
+    cout << ans[i] << endl;
+  }
 }

@@ -4,6 +4,7 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+using P = pair<ll, ll>;
 string char_to_string(char val) {
   return string(1, val);
 }
@@ -34,28 +35,29 @@ int vector_finder(std::vector<ll> vec, int number) {
     return 0;
   }
 }
+struct edge {
+  ll to, cost;
+};
 
 ll N;
-vector<string> ans;
-void dfs(string s) {
-  if(stoll(s) > N) return;
-  if(s.size() > 10) return;
-  if(s.size() <= 10 && s.size() > 2) {
-    bool flag = false;
-    map<char, int> m; m['3'] = 0; m['5'] = 0; m['7'] = 0;
-    REP(i, s.size()) m[s[i]]++;
-    if(m['3'] > 0 && m['5'] > 0 && m['7'] > 0) flag = true;
-    if(flag == true) ans.push_back(s);
+vector<ll> A;
+void dfs(ll i) {
+  if(i <= N && i != 0) {
+    map<ll, ll> m;
+    string check = to_string(i);
+    REP(i, check.size()) {
+      m[check[i]]++;
+    }
+    if(m.size() == 3) A.push_back(i);
   }
-  dfs(s + "3");
-  dfs(s + "5");
-  dfs(s + "7");
+  if(i > N || to_string(i).size() >= 13) return;
+  dfs(i * 10 + 3);
+  dfs(i * 10 + 5);
+  dfs(i * 10 + 7);
 }
 
 int main() {
   cin >> N;
-  dfs("3");
-  dfs("5");
-  dfs("7");
-  cout << ans.size() << endl;
+  dfs(3); dfs(5); dfs(7);
+  cout << A.size() << endl;
 }

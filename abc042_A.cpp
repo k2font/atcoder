@@ -1,13 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int main(){
-    int A, B, C; cin >> A >> B >> C;
+#define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
+#define all(x) (x).begin(),(x).end()
+using ll = long long;
+using P = pair<ll, ll>;
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+struct edge {
+  ll to, cost;
+};
 
-    int cnt5 = 0;
-    if((A == 5 && B == 5 && C == 7) || (A == 7 && B == 5 && C == 5) || (A == 5 && B == 7 && C == 5)) {
-        cout << "YES" << endl;
-    } else {
-        cout << "NO" << endl;
-    }
+int main() {
+    int A, B, C; cin >> A >> B >> C;
+    if(A + B + C == 17) cout << "YES" << endl;
+    else cout << "NO" << endl;
 }

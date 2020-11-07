@@ -1,10 +1,38 @@
 #include <bits/stdc++.h>
-#include <iomanip>
 using namespace std;
 
-int main(){
-    int N, K;
-    cin >> N >> K;
+#define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
+#define all(x) (x).begin(),(x).end()
+using ll = long long;
+using P = pair<ll, ll>;
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+struct edge {
+  ll to, cost;
+};
 
-    
+int main() {
+  string N; cin >> N;
+  int K; cin >> K;
+  vector<ll> dp(N.size() + 1, 0);
+  
+  cout << dp[N.size() - 1] << endl;
 }

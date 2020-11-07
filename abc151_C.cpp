@@ -40,18 +40,15 @@ struct edge {
 
 int main() {
   ll N, M; cin >> N >> M;
-  vector<pair<int, int>> ans(N + 1); // 提出数と0, 1の正解か不正解か
+  vector<ll> p(M); vector<string> S(M); REP(i, M) cin >> p[i] >> S[i];
+  map<int, int> m; ll ac = 0; ll wa = 0;
   REP(i, M) {
-    int p; string S; cin >> p >> S;
-    if(S == "WA" && ans[p].second == 0) ans[p].first++;
-    else if(S == "AC") ans[p].second = 1;
-  }
-  ll res = 0; ll pena = 0;
-  REP(i, N + 1) {
-    if(ans[i].second == 1) {
-      res++;
-      pena += ans[i].first;
+    if(S[i] == "WA" && m[p[i]] != -1) m[p[i]]++;
+    else if(S[i] == "AC" && m[p[i]] != -1) {
+      ac++;
+      wa += m[p[i]];
+      m[p[i]] = -1;
     }
   }
-  cout << res << " " << pena << endl;
+  cout << ac << " " << wa << endl;
 }

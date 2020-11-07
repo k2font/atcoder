@@ -35,7 +35,26 @@ int vector_finder(std::vector<ll> vec, int number) {
   }
 }
 
+// 最大公約数
+int gcd(int a, int b) {
+  if (a % b == 0) {
+    return(b);
+  } else {
+    return(gcd(b, a % b));
+  }
+}
 int main() {
   ll N, M; cin >> N >> M;
-  
+  int a = M / N; int b = M % N;
+  vector<ll> tmp;
+  REP(i, N) {
+    tmp.push_back(a);
+  }
+  tmp[0] += b; ll ans = 0;
+  if(N != 1) ans = gcd(tmp[0], tmp[1]);
+  else ans = tmp[0];
+  for(int i = 2; i < N ; ++i) {
+    ans = gcd(ans, tmp[i]);
+  }
+  cout << ans << endl;
 }

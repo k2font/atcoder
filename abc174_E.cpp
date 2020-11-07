@@ -38,23 +38,18 @@ struct edge {
   ll to, cost;
 };
 
-int N; ll K;
-
 int main() {
-  cin >> N >> K;
+  int N; ll K; cin >> N >> K;
   vector<ll> A(N); REP(i, N) cin >> A[i];
-  sort(all(A));
-
-  ll ng = -1;
-	ll ok = A[N - 1];
-	while(abs(ok - ng) > 1) {
-		ll mid = (ok + ng) / 2;
-		if(true) {
-			ok = mid;
-		} else {
-			ng = mid;
-		}
-	}
-	
-	return ok;
+  ll ng = 0; ll ok = *max_element(all(A));
+  while(abs(ok - ng) > 1) {
+    ll mid = (ok + ng) / 2;
+    ll tmp = 0;
+    REP(i, N) {
+      tmp += (A[i] - 1) / mid;
+    }
+    if(K >= tmp) ok = mid;
+    else ng = mid;
+  }
+  cout << ok << endl;
 }

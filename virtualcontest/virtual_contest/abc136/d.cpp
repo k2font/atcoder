@@ -4,60 +4,67 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
 
-int main(){
-    string S; cin >> S;
+const int MOD = pow(10, 9) + 7;
+const int INF = pow(10, 9);
 
-    int cnt = 0;
-    int trig = 0;
-    int r_cnt = 0;
-    vector<int> res(S.size()); REP(i, S.size()) res[i] = 0;
+int dx[4] = {0, 1, 0, -1};
+int dy[4] = {1, 0, -1, 0};
+int H, W;
+vector<vector<ll>> a;
+vector<vector<ll>> dp;
 
-    REP(i, S.size()) {
-        if((S[i] == 'R' && S[i - 1] == 'R') || i == 0) {
-            cnt++;
-        } else if(S[i - 1] == 'R' && S[i] == 'L') {
-            trig = i - 1;
-            r_cnt = cnt - 1;
-            cnt++;
-        } else if(S[i - 1] == 'L' && S[i] == 'L') {
-            cnt++;
-        } else if(S[i] == 'R' && S[i - 1] == 'L') {
-            if(cnt % 2 == 0) {
-                res[trig] = cnt / 2;
-                res[trig + 1] = cnt / 2;
-            } else {
-                if(r_cnt % 2 == 1) {
-                    res[trig] = cnt / 2;
-                    res[trig + 1] = cnt / 2 + 1;
-                } else {
-                    res[trig] = cnt / 2 + 1;
-                    res[trig + 1] = cnt / 2;
-                }
-            }
-            cnt = 1;
-            trig = 0;
-        }
-
-        // ラストLのとき
-        if(i == S.size() - 1) {
-            if(cnt % 2 == 0) {
-                res[trig] = cnt / 2;
-                res[trig + 1] = cnt / 2;
-            } else {
-                if(r_cnt % 2 == 1) {
-                    res[trig] = cnt / 2;
-                    res[trig + 1] = cnt / 2 + 1;
-                } else {
-                    res[trig] = cnt / 2 + 1;
-                    res[trig + 1] = cnt / 2;
-                }
-            }
-            cnt = 1;
-            trig = 0;
-        }
+ll dfs(int y, int x) {
+  if(dp[y][x] != -1) return dp[y][x];
+  ll ret = 1;
+  REP(i, 4) {
+    int ny = y + dy[i], nx = x + dx[i];
+    if(!(0 <= ny && ny < H && 0 <= nx && nx < W)) {
+      continue;
     }
+    if(a[y][x] < a[ny][nx]) {
+      ret += dfs(ny, nx);
+      ret %= MOD;
+    }
+  }
+  return dp[y][x] = ret;
+}
 
-    REP(i, S.size()) cout << res[i] << " ";
-    cout << endl;
+int main() {
+  cin >> H >> W;
+  a.resize(H, vector<ll>(W));
+  dp.resize(1010, vector<ll>(1010, -1));
+  REP(i, H) {
+    REP(k, W) {
+      cin >> a[i][k];
+    }
+  }
+  ll ans = 0;
+  REP(i, H) {
+    REP(k, W) {
+      ans += dfs(i, k);
+      ans %= MOD;
+    }
+  }
+  cout << ans << endl;
 }

@@ -1,66 +1,79 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-using ll = long long;
-#define REP(i,n) for(ll i=0, i##_len=(n); i<i##_len; ++i)
-#define all(x) (x).begin(),(x).end()
-string char_to_string(char val) {
-  return string(1, val);
-}
-int char_to_int(char val) {
-  return val - '0';
-}
+const int maxn=1e6+5;
+int n;
+int bj[maxn];
+int a[maxn];
+int cnta[maxn];
+int cntb[maxn];
+typedef pair<int,int> pii;
 
-int main() {
-  int n; cin >> n;
-  vector<int> v(n); REP(i, n) cin >> v[i];
+int main()
+{
 
-  map<int, int> e_tmp, o_tmp;
-  for(int i = 1; i < n; i = i + 2) {
-    o_tmp[v[i]]++;
-  }
-
-  for(int i = 0; i < n; i = i + 2) {
-    e_tmp[v[i]]++;
-  }
-
-  int o_max = 0;
-  int e_max = 0;
-  int o_num = 0;
-  int e_num = 0;
-  int o_max_2 = 0;
-  int e_max_2 = 0;
-  for(auto c : o_tmp) {
-    if(o_max < c.second) {
-      o_num = c.first;
-      o_max = c.second;
+    ios::sync_with_stdio(false);
+    cin>>n;
+    for(int i=1;i<=n;i++)
+    {
+        cin>>a[i];
+        if(i&1)
+        {
+            cnta[a[i]]++;
+        }else{
+            cntb[a[i]]++;
+        }
     }
-  }
-
-  for(auto c : o_tmp) {
-    if(o_max > c.second && c.second > o_max_2) {
-      o_max_2 = c.second;
+    vector<pii> ji,ou;
+    for(int i=1;i<=n;i++)
+    {
+        if(i&1)
+        {
+            ji.push_back(make_pair(cnta[a[i]],a[i]));
+        }else
+        {
+            ou.push_back(make_pair(cntb[a[i]],a[i]));
+        }
     }
-  }
-
-  for(auto d : e_tmp) {
-    if(e_max < d.second) {
-      e_num = d.first;
-      e_max = d.second;
+    sort(ji.begin(),ji.end());
+    ji.erase(unique(ji.begin(),ji.end()),ji.end());
+    sort(ou.begin(),ou.end());
+    ou.erase(unique(ou.begin(),ou.end()),ou.end());
+    int ans=1e9;
+    for(int i=1;i<=n;i+=2)
+    {
+        if(ou[ou.size()-1].second!=a[i])
+        {
+            ans=min(ans,n/2-cnta[a[i]]+n/2-ou[ou.size()-1].first);
+        }else
+        {
+            if(ou.size()>=2)
+            {
+//                cout<<ou[n/2-2].first<<" "<<ou[n/2-2].second<<endl;
+                ans=min(ans,n/2-cnta[a[i]]+n/2-ou[ou.size()-2].first);
+            }else
+            {
+                ans=min(ans,n/2-cnta[a[i]]+n/2);
+            }
+        }
     }
-  }
-
-  for(auto c : o_tmp) {
-    if(e_max > c.second && c.second > e_max_2) {
-      e_max_2 = c.second;
+    for(int i=2;i<=n;i+=2)
+    {
+        if(ji[ji.size()-1].second!=a[i])
+        {
+            ans=min(ans,n/2-cntb[a[i]]+n/2-ji[ji.size()-1].first);
+        }else
+        {
+            if(ji.size()>=2)
+            {
+                ans=min(ans,n/2-cntb[a[i]]+n/2-ji[ji.size()-2].first);
+            }else
+            {
+                ans=min(ans,n/2-cntb[a[i]]+n/2);
+            }
+        }
     }
-  }
+    cout<<ans<<endl;
 
-  // cout << e_max_2 << " " << e_max << " " << o_max_2 << " " << o_max << endl;
-
-  if(o_num == e_num) {
-    cout << min(n - e_max_2 - o_max, n - e_max - o_max_2) << endl;
-  } else {
-    cout << n - e_max - o_max << endl;
-  }
+    return 0;
 }

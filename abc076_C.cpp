@@ -1,47 +1,52 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-using ll = long long;
-#define REP(i,n) for(ll i=0, i##_len=(n); i<i##_len; ++i)
+#define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
+using ll = long long;
+using P = pair<ll, ll>;
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
 }
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+struct edge {
+  ll to, cost;
+};
 
 int main() {
-  string sd, T; cin >> sd >> T;
-
-  bool flag = false;
-  REP(i, sd.size()) {
-    if(sd.at(i) == T.at(0)) {
-      REP(j, T.size()) {
-        if(j == 0) continue;
-        if(sd.at(i + j) == '?') {
-          if(j == T.size() - 1) {
-            REP(k, T.size()) {
-              sd.at(i + k) = T.at(k);
-              flag = true;
-            }
-          }
-        } else {
-          break;
+  string S, T; cin >> S >> T;
+  bool f = false;
+  for(int i = S.size() - 1; i >= 0; --i) {
+    for(int k = i; k < i + T.size(); ++k) {
+      if(!(S[k] == T[k - i] || '?' == S[k])) {
+        break;
+      }
+      if(k == i + T.size() - 1) {
+        for(int m = i; m < i + T.size(); ++m) {
+          if(S[m] == '?') S[m] = T[m - i];
         }
+        f = true;
       }
     }
+    if(f) break;
   }
-
-  REP(i, sd.size()) {
-    if(sd.at(i) == '?') {
-      sd.at(i) = 'a';
-    }
-  }
-
-  if(flag) {
-    cout << sd << endl;
-  } else {
-    cout << "UNRESTORABLE" << endl;
-  }
+  REP(i, S.size()) if(S[i] == '?') S[i] = 'a'; // 後処理
+  if(f) cout << S << endl;
+  else cout << "UNRESTORABLE" << endl;
 }

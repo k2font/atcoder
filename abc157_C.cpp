@@ -37,25 +37,25 @@ int vector_finder(std::vector<ll> vec, int number) {
 }
 
 int main() {
-    int N, M; cin >> N >> M;
-    vector<int> s(M), c(M); REP(i, M) cin >> s[i] >> c[i];
-    for(int i = 0; i <= 1000; i++) {
-        if(i == 1000) {
-            cout << -1 << endl;
-            break;
-        }
-        string tmp = to_string(i);
-        if(tmp.size() != N) continue;
-        bool flag = false;
-        for(int k = 0; k < M; ++k) {
-            if(char_to_int(tmp[s[k] - 1]) != c[k]) break;
-            if(k == M - 1) {
-                flag = true;
-            }
-        }
-        if(flag == true || M == 0) {
-            cout << tmp << endl;
-            break;
-        }
+  int N, M; cin >> N >> M;
+  vector<int> s(M), c(M); REP(i, M) cin >> s[i] >> c[i];
+  int ans = 1000;
+  for(int i = 0; i <= 999; ++i) {
+    string S = to_string(i); bool flag = false;
+    REP(k, M) {
+      if(char_to_int(S[s[k] - 1]) != c[k]) {
+        flag = true;
+        break;
+      }
     }
+    if(!flag) {
+      if(S.size() == N) {
+        ans = i;
+        break;
+      }
+    }
+  }
+
+  if(ans == 1000) cout << -1 << endl;
+  else cout << ans << endl;
 }

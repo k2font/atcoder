@@ -4,13 +4,34 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
 
-int main(){
-    int A, B, C; cin >> A >> B >> C;
-
-    if(A > B + C) {
-        cout << 0 << endl;
-    } else {
-        cout << C - (A - B) << endl;
-    }
+int main() {
+  string S; cin >> S;
+  int ans = 0;
+  REP(i, S.size()) {
+    int a = char_to_int(S[i]);
+    if(i % 2 == 0) ans += a;
+    else ans -= a;
+  }
+  cout << ans << endl;
 }
