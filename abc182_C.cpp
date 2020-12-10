@@ -36,20 +36,27 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+  ll N; cin >> N;
+  string s = to_string(N); int k = s.size();
+  int ans = 10000; int tmp = 0;
+  REP(i, k) {
+    tmp += char_to_int(s[i]);
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  if(tmp % 3 == 0) {
+    cout << 0 << endl;
+    return 0;
+  }
+  for(int bit = 1; bit < (1 << k); ++bit) {
+    int res = 0;
+    for(int i = 0; i < k; ++i) {
+      if(bit & (1 << i)) {
+        res += char_to_int(s[i]);
+      }
+    }
+    if(res % 3 == 0) {
+      ans = min(ans, k - __builtin_popcount(bit));
     }
   }
-  cout << ans << endl;
+  if(ans != 10000) cout << ans << endl;
+  else cout << -1 << endl;
 }

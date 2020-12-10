@@ -28,33 +28,17 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
-// 条件判定の際、ある一定以上の値を超えないようにする関数
-ll INF = 2e18;
-ll mul(ll a, ll b) {
-  if(a == 0 or b == 0) return 0;
-  if(INF / a < b) return INF;
-  return a * b;
-}
 
 int main() {
-  ll X, Y; cin >> X >> Y;
-  ll A, B; cin >> A >> B;
-  ll ans = 0;
-  if(X >= B) {
-    ans = ((Y - 1) - X) / B;
-  } else {
-    // 増分がBに達するまでAをかける
-    ll cnt = 0;
-    while(true) {
-      if(mul(A, X) >= X + B) break;
-      if(mul(A, X) >= Y) break;
-      X *= A;
-      cnt++;
+  int N, L; cin >> N >> L;
+  string S; cin >> S;
+  int cnt = 1; int ans = 0;
+  REP(i, N) {
+    if(S[i] == '+') cnt++;
+    else cnt--;
+    if(cnt > L) {
+      ans++; cnt = 1;
     }
-    ans += cnt;
-    // ここから残りをB足す
-    ll tmp = (Y - 1) - X;
-    ans += (tmp / B);
   }
   cout << ans << endl;
 }

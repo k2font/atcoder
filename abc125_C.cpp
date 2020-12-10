@@ -35,21 +35,24 @@ struct edge {
   ll to, cost;
 };
 
+// 最大公約数
+int GCD(int a, int b) {
+  return b ? GCD(b, a%b) : a;
+}
+
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+  ll N; cin >> N;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  int ans = 0;
+  // 累積GCDを求める
+  vector<ll> left(N + 1, 0);
+  vector<ll> right(N + 1, 0);
+  REP(i, N) left[i + 1] = GCD(left[i], A[i]);
+  for(int i = N - 1; i >= 0; --i) {
+    right[i] = GCD(right[i + 1], A[i]);
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
+  REP(i, N) {
+    ans = max(ans, GCD(left[i], right[i + 1]));
   }
   cout << ans << endl;
 }

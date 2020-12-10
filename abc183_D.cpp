@@ -35,21 +35,24 @@ struct edge {
   ll to, cost;
 };
 
+// いもす法
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+  ll N, W; cin >> N >> W;
+  vector<ll> S(N), T(N), P(N);
+  REP(i, N) {
+    cin >> S[i] >> T[i] >> P[i];
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
+  int m = 200001;
+  vector<ll> t(m + 1, 0);
+  REP(i, N) {
+    t[S[i]] += P[i]; t[T[i]] -= P[i];
+  }
+  REP(i, m) {
+    t.at(i + 1) += t.at(i);
+  }
+  string ans = "Yes";
+  REP(i, m + 1) {
+    if(t[i] > W) ans = "No";
   }
   cout << ans << endl;
 }

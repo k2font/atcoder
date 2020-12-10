@@ -36,20 +36,20 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  string s; cin >> s;
+  string p = "";
+  REP(i, s.size()) {
+    p += s[i];
+    if(p.size() >= 3) {
+      if(p.substr(p.size() - 3, 3) == "mew") {
+        p.erase(p.size() - 3);
+        if(p == "" && i != s.size() - 1) {
+          cout << "Rabbit" << endl;
+          return 0;
+        }
+      }
     }
   }
-  cout << ans << endl;
+  if(p.size() == 0) cout << "Cat" << endl;
+  else cout << "Rabbit" << endl;
 }

@@ -35,21 +35,31 @@ struct edge {
   ll to, cost;
 };
 
-int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+ll N, M;
+vector<vector<ll>> tree;
+vector<int> dp; vector<bool> res;
+int f(int _x) { // xからスタートしたときの最長経路f(x)
+  if(res[_x] == 1) return dp[_x];
+  res[_x] = 1; int a = 0;
+  for(int i = 0; i < tree[_x].size(); ++i) {
+    a = max(a, f(tree[_x][i]) + 1);
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
+  // cout << a << endl;
+  dp[_x] = a;
+  return dp[_x];
+}
+
+int main() {
+  cin >> N >> M;
+  tree.resize(N); dp.resize(N); res.resize(N, 0);
+  REP(i, M) {
+    ll x, y; cin >> x >> y; --x; --y;
+    tree[x].push_back(y);
+  }
+  int ans = 0;
+  REP(i, N) f(i);
+  REP(i, N) {
+    ans = max(ans, dp[i]);
   }
   cout << ans << endl;
 }

@@ -36,20 +36,13 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+  ll N, A, B; cin >> N >> A >> B;
+  vector<ll> X(N); REP(i, N) cin >> X[i];
+  ll max_n = A * (X[N - 1] - X[0]);
+  for(int i = 0; i < N - 1; ++i) {
+    ll res = X[i + 1] - X[i];
+    res *= A;
+    if(res > B) max_n = max_n - res + B;
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
-  }
-  cout << ans << endl;
+  cout << max_n << endl;
 }

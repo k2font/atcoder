@@ -36,19 +36,23 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  int N, K; cin >> N >> K;
+  vector<ll> x(N), y(N); REP(i, N) cin >> x[i] >> y[i];
+  ll ans = 9e18;
+  for(int i = 0; i < N; ++i) {
+    for(int k = i + 1; k < N; ++k) {
+      ll tmp = 0;
+      for(int n = 0; n < N; ++n) {
+        for(int m = n + 1; m < N; ++m) {
+          int cnt = 0;
+          REP(p, N) {
+            if(min(x[i], x[k]) <= x[p] && x[p] <= max(x[i], x[k]) && min(y[n], y[m]) <= y[p] && y[p] <= max(y[n], y[m])) cnt++;
+          }
+          if(cnt == K) {
+            ans = min(ans, (ll)(abs(x[i] - x[k])) * (ll)(abs(y[n] - y[m])));
+          }
+        }
+      }
     }
   }
   cout << ans << endl;

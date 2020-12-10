@@ -5,17 +5,11 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
-const int dx[4] = {1, 0, -1, 0};
-const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
-}
-char inverse_char(char c) {
-  if(isupper(c)) return tolower(c);
-  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -36,20 +30,20 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  int a, b, x, y; cin >> a >> b >> x >> y;
+  if(a == b) {
+    cout << x << endl;
+  } else if(a < b) {
+    if(y <= 2 * x) {
+      cout << (b - a) * y + x << endl;
+    } else if(y > 2 * x) {
+      cout << (b - a) * 2 * x + x << endl;
+    }
+  } else if(a > b) {
+    if(y <= 2 * x) {
+      cout << ((a - b) - 1) * y + x << endl;
+    } else if(y > 2 * x) {
+      cout << (a - b) * 2 * x - x << endl;
     }
   }
-  cout << ans << endl;
 }

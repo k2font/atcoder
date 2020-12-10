@@ -36,20 +36,17 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
+  ll N; cin >> N;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  ll a = 0;
+  ll res = 0; // 途中点での最大値
+  ll tmp = 0; // それまでの最大値
+  ll ans = 0; // 最初にいた座標0が最大値となる
+  REP(i, N) {
+    a += A[i];
+    res = max(res, a);
+    ans = max(ans, max((tmp + a), (tmp + res)));
+    tmp += a;
   }
   cout << ans << endl;
 }

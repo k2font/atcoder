@@ -39,26 +39,17 @@ int main() {
   sort(all(W)); // 変形形態もソートしておく
   // Wからどれを選ぶかは二分探索で求める
   // 各Hとの差が最も小さいもの
-  ll res = pow(10, 10); ll p = -1;
-  REP(i, N) {
-    bool f = false;
-    ll tmp = *lower_bound(all(W), H[i]);
-    if(tmp - H[i] > H[i + 1] - H[i]) {
-      f = true;
-    } else {
-      if(res > tmp - H[i]) {
-        res = tmp - H[i];
-        p = tmp;
-      }
-    }
-    if(f) i++; // Wから取らなかったら飛ばす
+  vector<ll> left(N + 1, 0);
+  vector<ll> right(N + 1, 0);
+  for(int i = 2; i < N; i += 2) {
+    left[i] = left[i - 2] + H[i - 1] - H[i - 2];
+    right[i] = right[i - 2] + H[N - i + 1] - H[N - i];
   }
-  H.push_back(p);
-  sort(all(H));
-  ll ans = 0;
-  REP(i, N + 1) {
-    if(i % 2 == 1) continue;
-    ans += (H[i + 1] - H[i]);
+  ll ans = pow(10, 18);
+  for(auto w: W) {
+    int i = lower_bound(all(H), w) - H.begin(); // wが前から何番目にいればいいか
+    if(i % 2 == 0) chmin(ans, left[i] + right[N - i - 1] + H[i] - w);
+    else chmin(ans, left[i - 1] + right[N - i] + w - H[i - 1]);
   }
   cout << ans << endl;
 }

@@ -35,21 +35,35 @@ struct edge {
   ll to, cost;
 };
 
+const int INF = pow(10, 9) + 7;
+
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  ll r1, c1, r2, c2; cin >> r1 >> c1 >> r2 >> c2;
+  if(r1 == r2 && c1 == c2) {
+    cout << 0 << endl;
+    return 0;
+  } else if (
+    r1 + c1 == r2 + c2 ||
+    r1 - c1 == r2 - c2 ||
+    abs(r1 - r2) + abs(c1 - c2) <= 3
+  ) {
+    cout << 1 << endl;
+    return 0;
+  } else {
+    // 2の場合
+    if((r1 + c1 + r2 + c2) % 2 == 0) {
+      cout << 2 << endl;
+      return 0;
+    } else if(abs(r1 - r2) + abs(c1 - c2) <= 6) {
+      cout << 2 << endl;
+      return 0;
+    } else if(abs(r1 + c1 - r2 - c2) <= 3) {
+      cout << 2 << endl;
+      return 0;
+    } else if(abs(r1 - c1 - r2 + c2) <= 3) {
+      cout << 2 << endl;
+      return 0;
     }
   }
-  cout << ans << endl;
+  cout << 3 << endl;
 }

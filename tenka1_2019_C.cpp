@@ -5,17 +5,11 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
-const int dx[4] = {1, 0, -1, 0};
-const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
-}
-char inverse_char(char c) {
-  if(isupper(c)) return tolower(c);
-  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -36,20 +30,15 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+  ll N; cin >> N;
+  vector<ll> A(N), B(N); REP(i, N) cin >> A[i] >> B[i];
+  vector<P> t(N);
+  REP(i, N) t[i] = P(A[i], B[i]);
+  sort(all(t), greater<pair<ll, ll>>());
+  ll a = 0; ll b = 0;
+  REP(i, N) {
+    if(i % 2 == 0) a += t[i].first;
+    else b += t[i].second;
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
-  }
-  cout << ans << endl;
+  cout << a - b << endl;
 }

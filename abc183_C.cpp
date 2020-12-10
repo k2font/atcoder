@@ -36,20 +36,27 @@ struct edge {
 };
 
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  ll N, K; cin >> N >> K;
+  vector<vector<ll>> T(N, vector<ll>(N));
+  REP(i, N) {
+    REP(k, N) {
+      cin >> T[i][k];
     }
   }
+  vector<int> vec(N - 1);
+  REP(i, N - 1) vec[i] = i;
+  ll ans = 0;
+  do{
+    ll tmp = 0;
+    for(int i = 0; i < N - 1; ++i) {
+      if(i == 0) {
+        tmp += T[0][vec[i] + 1];
+      } else {
+        tmp += T[vec[i - 1] + 1][vec[i] + 1];
+      }
+    }
+    tmp += T[vec[N - 2] + 1][0];
+    if(tmp == K) ans++;
+  } while(next_permutation(all(vec)));
   cout << ans << endl;
 }

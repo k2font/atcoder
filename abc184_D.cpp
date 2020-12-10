@@ -35,21 +35,32 @@ struct edge {
   ll to, cost;
 };
 
+const int INF = pow(10, 9) + 7;
+
+int A, B, C;
+template<class T>
+vector<T> make_vec(size_t a){
+    return vector<T>(a);
+}
+template<class T, class... Ts>
+auto make_vec(size_t a, Ts... ts){
+  return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));
+}
+
+auto dp = make_vec<double>(101, 101, 101);
+
+double dfs(int a, int b, int c) {
+  if(dp[a][b][c]) return dp[a][b][c];
+  if(a == 100 || b == 100 || c == 100) return 0;
+  double ans = 0; int par = a + b + c;
+  ans += (dfs(a + 1, b, c) + 1) * a / par;
+  ans += (dfs(a, b + 1, c) + 1) * b / par;
+  ans += (dfs(a, b, c + 1) + 1) * c / par;
+  dp[a][b][c] = ans;
+  return ans;
+}
+
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
-  }
-  cout << ans << endl;
+  cin >> A >> B >> C;
+  cout << fixed << setprecision(20) << dfs(A, B, C) << endl;
 }

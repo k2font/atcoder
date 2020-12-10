@@ -4,68 +4,65 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
-
-// 四方向への移動ベクトル
-const int dx[4] = {1, 0};
-const int dy[4] = {0, 1};
-
-int H, W;
-vector<string> field;
-
-// 探索
-int cnt[100][100];
-int res = 10000007;
-
-int seen[510][510]; // seen[h][w] := マス (h, w) が検知済みかどうか
-
-void dfs(int h, int w, int _cnt) {
-    seen[h][w]++;
-    // 四方向を探索
-    for (int dir = 0; dir < 2; ++dir) {
-        int nh = h + dx[dir];
-        int nw = w + dy[dir];
-
-        // 場外アウトしたり、移動先が壁の場合はスルー
-        if ( nh >= H || nw >= W ) continue;
-
-        // 移動先が探索済みの場合
-        if (seen[nh][nw] > 80) continue;
-
-        if (field[nh][nw] == '#') {
-            if(cnt[nh][nw] >= _cnt + 1) {
-                cnt[nh][nw] = _cnt + 1;
-            } else {
-                cnt[nh][nw] = _cnt;
-            }
-        } else {
-            cnt[nh][nw] = _cnt;
-        }
-
-        if(nh + 1 == H && nw + 1 == W) {
-            if(res > cnt[nh][nw]) {
-                res = cnt[nh][nw];
-            }
-        }
-
-        // cout << nh << " " << nw << " " << cnt[nh][nw] << " " << field[nh][nw] << endl;
-
-        // 再帰的に探索
-        dfs(nh, nw, cnt[nh][nw]);
-    }
+using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
+string char_to_string(char val) {
+  return string(1, val);
 }
+int char_to_int(char val) {
+  return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+struct edge {
+  ll to, cost;
+};
 
-int main(){
-    cin >> H >> W;
-    field.resize(H); REP(i, H) cin >> field[i];
+int main() {
+  int H, W; cin >> H >> W;
+  vector<string> s(H); REP(i, H) cin >> s[i];
+  vector<vector<int>> dp(H, vector<int>(W, 10000));
+  if(s[0][0] == '#') dp[0][0] = 1;
+  else dp[0][0] = 0;
+  REP(i, H) {
+    REP(k, W) {
+      if(i + 1 < H) {
+        if(s[i + 1][k] == '#' && s[i][k] == '.') dp[i + 1][k] = min(dp[i + 1][k], dp[i][k] + 1);
+        else                                     dp[i + 1][k] = min(dp[i + 1][k], dp[i][k]);
+      }
 
-    memset(cnt, 100000007, sizeof(cnt));
-
-    // 探索開始
-    if(field[0][0] == '#') {
-        dfs(0, 0, 1); // スタート位置
-    } else {
-        dfs(0, 0, 0); // スタート位置
+      if(k + 1 < W) {
+        if(s[i][k + 1] == '#' && s[i][k] == '.') dp[i][k + 1] = min(dp[i][k + 1], dp[i][k] + 1);
+        else                                     dp[i][k + 1] = min(dp[i][k + 1], dp[i][k]);
+      }
     }
-
-    cout << res << endl;
+  }
+  if(s[H - 1][W - 1] == '#' && s[H - 1][W - 2] == '.') {
+    dp[H - 1][W - 1] = min(dp[H - 1][W - 1], dp[H - 1][W - 2] + 1);
+  } else {
+    dp[H - 1][W - 1] = min(dp[H - 1][W - 1], dp[H - 1][W - 2]);
+  }
+  if(s[H - 1][W - 1] == '#' && s[H - 2][W - 1] == '.') {
+    dp[H - 1][W - 1] = min(dp[H - 1][W - 1], dp[H - 2][W - 1] + 1);
+  } else {
+    dp[H - 1][W - 1] = min(dp[H - 1][W - 1], dp[H - 2][W - 1]);
+  }
+  cout << dp[H - 1][W - 1] << endl;
 }

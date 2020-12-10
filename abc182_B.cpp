@@ -35,21 +35,24 @@ struct edge {
   ll to, cost;
 };
 
+// 最大公約数(ゼロ除算対策済みバージョン)
+int gcd(int a, int b) {
+	return b ? gcd(b, a%b) : a;
+}
+
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+  int N; cin >> N;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  int ans = 0; int a = 0;
+  for(int i = 2; i <= 1000; ++i) {
+    int res = 0;
+    REP(k, N) {
+      if(A[k] % i == 0) res++;
+    }
+    if(ans <= res) {
+      a = i;
+      ans = res;
     }
   }
-  cout << ans << endl;
+  cout << a << endl;
 }

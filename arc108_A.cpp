@@ -35,21 +35,26 @@ struct edge {
   ll to, cost;
 };
 
-int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
-  }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
+vector<ll> divisor(ll n) {
+  vector<ll> ret;
+  for(ll i = 1; i * i <= n; i++) {
+    if(n % i == 0) {
+      ret.push_back(i);
+      if(i * i != n) ret.push_back(n / i);
     }
+  }
+
+  sort(begin(ret), end(ret));
+  return (ret);
+}
+
+int main() {
+  ll S, P; cin >> S >> P;
+  auto p = divisor(P);
+  string ans = "No";
+  REP(i, p.size()) {
+    ll t = P / p[i];
+    if(p[i] + t == S) ans = "Yes";
   }
   cout << ans << endl;
 }

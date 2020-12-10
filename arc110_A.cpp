@@ -5,17 +5,11 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
-const int dx[4] = {1, 0, -1, 0};
-const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
-}
-char inverse_char(char c) {
-  if(isupper(c)) return tolower(c);
-  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -35,21 +29,21 @@ struct edge {
   ll to, cost;
 };
 
+// 最大公約数(ゼロ除算対策済みバージョン)
+ll gcd(ll a, ll b) {
+	return b ? gcd(b, a%b) : a;
+}
+
+// 最小公倍数
+ll lcm(ll a, ll b) {
+  return a / gcd(a, b) * b;
+}
+
 int main() {
-  int N, M; cin >> N >> M;
-  vector<P> p(M);
-  REP(i, M) {
-    int A, B;
-    cin >> A >> B; A--; B--;
-    p[i] = P(B, A);
+  ll N; cin >> N;
+  ll ans = 2;
+  for(int i = 2; i <= N; ++i) {
+    ans = lcm(ans, i);
   }
-  sort(all(p));
-  int f = -1; int ans = 0;
-  for(int i = 0; i < p.size(); ++i) {
-    if(p[i].second >= f) {
-      ans++;
-      f = p[i].first;
-    }
-  }
-  cout << ans << endl;
+  cout << ans + 1 << endl;
 }
