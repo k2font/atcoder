@@ -30,16 +30,23 @@ struct edge {
 };
 
 int main() {
-  ll N; cin >> N;
-  vector<ll> A(N), B(N); REP(i, N) cin >> A[i] >> B[i];
-  vector<pair<ll, P>> t(N);
-  REP(i, N) t[i] = make_pair(A[i] + B[i], P(A[i], B[i]));
-  sort(all(t), greater<pair<ll, P>>());
-  ll a = 0; ll b = 0;
+  int N; cin >> N;
+  vector<double> p(N); REP(i, N) cin >> p[i];
+  double ans = 0.0;
+
+  vector<vector<double>> dp(N + 1, vector<double>(N + 1, 0.0));
+
+  dp[0][0] = 1.0;
+
   REP(i, N) {
-    if(i % 2 == 0) a += t[i].second.first;
-    else b += t[i].second.second;
+    REP(k, i + 1) {
+      dp[i + 1][k + 1] += dp[i][k] * p[i];
+      dp[i + 1][k] += dp[i][k] * (1 - p[i]);
+    }
   }
-  ll ans = a - b;
-  cout << ans << endl;
+
+  for(int i = (N + 1) / 2; i <= N; ++i) { // 表が過半数を占めるパターンだけ合計する
+    ans += dp[N][i];
+  }
+  cout << fixed << setprecision(12) << ans << endl;
 }

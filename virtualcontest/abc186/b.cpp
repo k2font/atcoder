@@ -30,16 +30,16 @@ struct edge {
 };
 
 int main() {
-  ll N; cin >> N;
-  vector<ll> A(N), B(N); REP(i, N) cin >> A[i] >> B[i];
-  vector<pair<ll, P>> t(N);
-  REP(i, N) t[i] = make_pair(A[i] + B[i], P(A[i], B[i]));
-  sort(all(t), greater<pair<ll, P>>());
-  ll a = 0; ll b = 0;
-  REP(i, N) {
-    if(i % 2 == 0) a += t[i].second.first;
-    else b += t[i].second.second;
+  ll A, B, C, K; cin >> A >> B >> C >> K;
+  ll ans = 0;
+  for(int i = 0; i < K; ++i) {
+    if(A > 0) {
+      ++ans; --A;
+    } else if(B > 0) {
+      --B;
+    } else {
+      --ans; --C;
+    }
   }
-  ll ans = a - b;
   cout << ans << endl;
 }

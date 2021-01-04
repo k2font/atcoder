@@ -5,11 +5,17 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -30,16 +36,18 @@ struct edge {
 };
 
 int main() {
-  ll N; cin >> N;
-  vector<ll> A(N), B(N); REP(i, N) cin >> A[i] >> B[i];
-  vector<pair<ll, P>> t(N);
-  REP(i, N) t[i] = make_pair(A[i] + B[i], P(A[i], B[i]));
-  sort(all(t), greater<pair<ll, P>>());
-  ll a = 0; ll b = 0;
-  REP(i, N) {
-    if(i % 2 == 0) a += t[i].second.first;
-    else b += t[i].second.second;
+  int N; cin >> N;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  ll ans = 0;
+  sort(all(A), greater<ll>());
+  ll tmp = 0;
+  for(int i = 1; i < N; ++i) {
+    tmp += A[i];
   }
-  ll ans = a - b;
+  REP(i, N) {
+    ans += (A[i] * (N - (i + 1)));
+    ans -= tmp;
+    if(i != N - 1) tmp -= A[i + 1];
+  }
   cout << ans << endl;
 }
