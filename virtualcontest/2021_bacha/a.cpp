@@ -36,8 +36,8 @@ struct edge {
 };
 
 int main() {
-  int a, b; cin >> a >> b;
-  if(a + b == 15) cout << "+" << endl;
-  else if(a * b == 15) cout << "*" << endl;
-  else cout << "x" << endl;
+  string C; cin >> C;
+
+  if(C[0] == C[1] && C[0] == C[2]) cout << "Won" << endl;
+  else cout << "Lost" << endl;
 }

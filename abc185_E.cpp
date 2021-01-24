@@ -36,5 +36,22 @@ struct edge {
 };
 
 int main() {
-  
+  ll N, M; cin >> N >> M;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  vector<ll> B(M); REP(i, M) cin >> B[i];
+
+  // LCSと似たようなDPをする。
+  vector<vector<ll>> dp(N + 1, vector<ll>(M + 1, 1000000000000009));
+  dp[0][0] = 0;
+  REP(i, N + 1) {
+    REP(k, M + 1) {
+      if(k > 0) chmin(dp[i][k], dp[i][k - 1] + 1);
+      if(i > 0) chmin(dp[i][k], dp[i - 1][k] + 1);
+      if(i > 0 && k > 0) {
+        if(A[i - 1] == B[k - 1]) chmin(dp[i][k], dp[i - 1][k - 1]);
+        else chmin(dp[i][k], dp[i - 1][k - 1] + 1);
+      }
+    }
+  }
+  cout << dp[N][M] << endl;
 }

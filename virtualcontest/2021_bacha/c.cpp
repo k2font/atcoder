@@ -36,21 +36,12 @@ struct edge {
 };
 
 int main() {
-  int N, A, B; cin >> N >> A >> B;
-  vector<string> s(N); vector<int> d(N); REP(i, N) cin >> s[i] >> d[i];
-  int ans = 0;
-  REP(i, N) {
-    if(s[i] == "East") {
-      if(d[i] > B) ans += B;
-      else if(A <= d[i] && d[i] <= B) ans += d[i];
-      else ans += A;
-    } else if(s[i] == "West") {
-      if(d[i] > B) ans -= B;
-      else if(A <= d[i] && d[i] <= B) ans -= d[i];
-      else ans -= A;
-    }
+  int A, B, C; cin >> A >> B >> C;
+  string ans = "NO";
+  int k = 0;
+  for(int i = 0; i < 1000000; ++i) {
+    k += A;
+    if(k % B == C) ans = "YES";
   }
-  if(ans < 0) cout << "West" << " " << -ans << endl;
-  else if(ans == 0) cout << "0" << endl;
-  else cout << "East" << " " << ans << endl;
+  cout << ans << endl;
 }

@@ -35,19 +35,31 @@ struct edge {
   ll to, cost;
 };
 
-// 多次元 vector 生成を行うテンプレート
-template<class T>
-vector<T> make_vec(size_t a){
-    return vector<T>(a);
-}
-template<class T, class... Ts>
-auto make_vec(size_t a, Ts... ts){
-  return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));
-}
-
-const ll INF = 1e18;
-const int MAX_N = 110;
-const int MAX_V = 100100;
 int main() {
-  
+  string s1, s2; cin >> s1 >> s2;
+  vector<vector<int>> dp(s1.size() + 1, vector<int>(s2.size() + 1));
+
+  REP(i, s1.size()) {
+    REP(k, s2.size()) {
+      if(s1[i] == s2[k]) chmax(dp[i + 1][k + 1], dp[i][k] + 1);
+      chmax(dp[i + 1][k + 1], dp[i][k + 1]);
+      chmax(dp[i + 1][k + 1], dp[i + 1][k]);
+    }
+  }
+
+  // 復元する
+  string ans = "";
+  int i = s1.size(); int k = s2.size();
+  while(i > 0 && k > 0) {
+    if(dp[i - 1][k] == dp[i][k]) {
+      --i;
+    } else if(dp[i][k - 1] == dp[i][k]) {
+      --k;
+    } else {
+      ans = ans + s1[i - 1];
+      --i; --k;
+    }
+  }
+  reverse(all(ans));
+  cout << ans << endl;
 }

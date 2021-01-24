@@ -37,30 +37,15 @@ struct edge {
 
 int main() {
   int N; cin >> N;
-  int M; cin >> M;
-  vector<ll> a(M), b(M);
-  vector<int> c(M, 0); // bitで表す
-  REP(i, M) {
-    cin >> a[i] >> b[i];
-    REP(k, b[i]) {
-      ll t; cin >> t; --t;
-      c[i] += (1 << t);
+  if(N % 3 != 0) {
+    cout << "No" << endl;
+  } else {
+    int n = N / 3; ++n; // 集合1つ分に含まれる要素数
+    cout << "Yes" << endl;
+    for(int m = 0; m < N; m += n) {
+      REP(i, n) {
+        cout << n << " " << m + 1 << " " << m + 2 << endl;
+      }
     }
   }
-
-  // bitDPでした
-  const long long INF = 1LL<<60;
-  int lp = 5000; // 定数を入れるようにしよう
-  vector<vector<ll>> dp(M + 10, vector<ll>(lp, INF));
-  dp[0][0] = 0;
-
-  for(int i = 0; i < M; ++i) {
-    for(int k = 0; k < (1 << N); ++k) {
-      chmin(dp[i + 1][k], dp[i][k]);
-      int nk = k | c[i];
-      chmin(dp[i + 1][k | c[i]], dp[i][k] + a[i]);
-    }
-  }
-
-  cout << (dp[M][(1<<N)-1] < INF ? dp[M][(1<<N)-1] : -1) << endl; 
 }

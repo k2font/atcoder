@@ -36,9 +36,31 @@ struct edge {
 };
 
 int main() {
-  int A, B, C; cin >> A >> B >> C;
-  if(A + B == C && A - B == C) cout << "?" << endl;
-  else if(A + B == C) cout << "+" << endl;
-  else if(A - B == C) cout << "-" << endl;
-  else cout << "!" << endl;
+  string S; cin >> S;
+  string ans = "WA";
+  if(S[0] == 'A') {
+    int tmp = 0; int a = -1;
+    for(int i = 2; i < S.size() - 1; ++i) {
+      if(S[i] == 'C') {
+        tmp++;
+        a = i;
+      }
+    }
+    if(tmp != 1) {
+      ans = "WA";
+      cout << ans << endl;
+      return 0;
+    }
+    REP(i, S.size()) {
+      if(i == 0) continue;
+      if(i == a) continue;
+      if(isupper(S[i])) {
+        ans = "WA";
+        cout << ans << endl;
+        return 0;
+      }
+      if(i == S.size() - 1) ans = "AC";
+    }
+  }
+  cout << ans << endl;
 }

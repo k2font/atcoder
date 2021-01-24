@@ -61,35 +61,42 @@ template <class Abel> struct BIT {
 };
 
 int main() {
-  ll N, D, A; cin >> N >> D >> A;
+  int N; cin >> N;
+  ll D, A; cin >> D >> A;
   vector<ll> X(N), H(N); REP(i, N) cin >> X[i] >> H[i];
-  vector<int> ids(N);
-  for (int i = 0; i < N; ++i) ids[i] = i;
-  sort(ids.begin(), ids.end(), [&](int i, int j) {
-    return X[i] < X[j];
-  });
-  vector<long long> nX(N), nH(N);
-  for (int i = 0; i < N; ++i) nX[i] = X[ids[i]], nH[i] = H[ids[i]];
-  X = nX, H = nH;
-
   BIT<ll> bit(N + 10);
-  for(int i = 0; i < N; ++i) {
-    bit.add(i + 1, i + 2, H[i]); // 区間を初期化
-  }
   ll ans = 0;
-  for(int i = 0; i < N; ++i) {
-    ll cur = bit.sum(i + 1, i + 2); // その地点での体力
-    if(cur <= 0) continue; // すでに0なら次のindexへ行く
+  
+  // モンスターをXが小さい順に並び替える
+  vector<pair<pair<ll, ll>, ll>> p(N);
+  REP(i, N) p[i] = make_pair(make_pair(X[i], H[i]), i);
+  sort(all(p));
+  vector<ll> nX(N), nH(N);
 
-    ll need = (cur + A - 1) / A; // モンスターiを倒すのに必要な必要な攻撃回数
+  // 並び替えた結果を反映した、新しいXとHを作成する
+  REP(i, N) {
+    nX[i] = X[p[i].second]; nH[i] = H[p[i].second];
+  }
+  X = nX; H = nH;
 
-    // X[i]を左端としたときに爆発が届く範囲を求める
-    ll right = X[i] + D * 2;
-    int id = upper_bound(X.begin(), X.end(), right) - X.begin();
+  REP(i, N) bit.add(i + 1, i + 2, H[i]); // BITの初期化
+  REP(i, N) {
+    // その地点X[i]の体力を求める
+    ll nokori = bit.sum(i + 1, i + 2);
+
+    // 地点X[i]の体力が0以下であれば、次の地点を見に行く
+    if(nokori <= 0) continue;
+
+    // モンスターiを倒すのに必要な爆弾を置く回数を求める
+    ll num = (nokori + A - 1) / A;
+
+    // X[i]を左端とした爆弾が届く範囲を求める
+    ll tmp = X[i] + 2 * D;
+    int id = upper_bound(all(X), tmp) - X.begin();
 
     // 爆発させる
-    bit.add(i + 1, id + 1, -need * A);
-    ans += need;
+    bit.add(i + 1, id + 1, -num * A);
+    ans += num;
   }
   cout << ans << endl;
 }

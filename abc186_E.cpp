@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+#include <atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
@@ -35,39 +37,24 @@ struct edge {
   ll to, cost;
 };
 
+// 最大公約数(ゼロ除算対策済みバージョン)
+int gcd(int a, int b) {
+	return b ? gcd(b, a%b) : a;
+}
+
 int main() {
+  const int MOD = 1000000007;
   int T; cin >> T;
-  // t個のテストケースに答える
   REP(i, T) {
     ll N, S, K; cin >> N >> S >> K;
-    // -1かどうか判定
-
-    // (N - S)がKで割り切れる時
-    if((N - S) % K == 0) cout << (N - S) / K << endl;
-    else { // そうじゃない時はシミュレーション
-      ll ans = (N - S) / K;
-      ll a = (N - S) % K;
-      ans += (N - S) / K * ((N - S) + (a));
-      // bool f = false;
-      // int c = 0;
-      // while(true) {
-      //   c++;
-      //   ll b = N + a;
-      //   if(b % K == 0) {
-      //     ans += b / K;
-      //     break;
-      //   } else {
-      //     if(b % K == a) {
-      //       cout << -1 << endl;
-      //       f = true;
-      //       break;
-      //     }
-      //     a = b % K;
-      //     ans += b / K;
-      //   }
-      // }
-      // if(f == true) continue;
-      cout << ans << endl;
+    ll g = gcd(N, K);
+    if(S % g) {
+      cout << -1 << endl;
+      continue;
     }
+    N = N / g; S = S / g; K = K / g;
+    modint::set_mod(N);
+    modint res = -modint(S) / K;
+    cout << res.val() << endl;
   }
 }

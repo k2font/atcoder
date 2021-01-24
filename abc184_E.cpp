@@ -35,90 +35,62 @@ struct edge {
   ll to, cost;
 };
 
+const int INF = 1001001001;
+
 int main() {
   int H, W; cin >> H >> W;
   vector<string> a(H);
   REP(i, H) cin >> a[i];
-  int ans = pow(10, 9) + 7;
-  int sx, sy, gx, gy;
-  map<char, int> s, g;
-  vector<vector<int>> res_s(H, vector<int>(W, -1)); // そのマスにたどり着くまでの最小回数を記録しておく
-  vector<vector<int>> res_g(H, vector<int>(W, -1)); // そのマスにたどり着くまでの最小回数を記録しておく
-
-  // sx, sy, gx, gyを特定する
+  // ワープ使う時、Sから最も近いワープマスからワープするのが最善。
+  // BFS中に最初にたどり着いたマスから全部のワープマスへワープするようにすると計算量が落ちる
+  vector<vector<int>> dist(H, vector<int>(W, INF));
+  queue<P> q;
   REP(i, H) {
-    REP(k, W) {
-      if(a[i][k] == 'S') {
-        sx = i; sy = k;
-      }
-      if(a[i][k] == 'G') {
-        gx = i; gy = k;
+    REP(j, W) {
+      // Sを探す
+      if(a[i][j] == 'S') {
+        q.emplace(i, j); //push_backでpairを使ってpushする代わりに、pair型の値をpushしてくれる関数
+        dist[i][j] = 0;
       }
     }
   }
-  
-  res_s[sx][sy] = 0;
-  queue<pair<pair<int, int>, int>> q; q.push(make_pair(make_pair(sx, sy), 0));
-  while(!q.empty()) { // res_sを埋める
-    auto p = q.front(); q.pop();
-    for(int i = 0; i < 4; ++i) {
-      int x = p.first.first + dx[i]; int y = p.first.second + dy[i];
-      if(x < 0 || x >= H) continue;
-      if(y < 0 || y >= W) continue;
-      if(res_s[x][y] != -1) continue;
-      if(a[x][y] == '#') continue;
-      res_s[x][y] = p.second + 1;
-      q.push(make_pair(make_pair(x, y), res_s[x][y]));
-    }
-  }
 
-  res_g[gx][gy] = 0; q.push(make_pair(make_pair(gx, gy), 0));
-  while(!q.empty()) { // res_gを埋める
-    auto p = q.front(); q.pop();
-    for(int i = 0; i < 4; ++i) {
-      int x = p.first.first + dx[i]; int y = p.first.second + dy[i];
-      if(x < 0 || x >= H) continue;
-      if(y < 0 || y >= W) continue;
-      if(res_g[x][y] != -1) continue;
-      if(a[x][y] == '#') continue;
-      res_g[x][y] = p.second + 1;
-      q.push(make_pair(make_pair(x, y), res_g[x][y]));
-    }
-  }
-
+  vector<vector<P>> warps(256);
   REP(i, H) {
-    REP(k, W) {
-      if(a[i][k] == '.' || a[i][k] == '#' || a[i][k] == 'S' || a[i][k] == 'G') continue;
-      s[a[i][k]] = max(s[a[i][k]], res_s[i][k]);
+    REP(j, W) {
+      warps[a[i][j]].emplace_back(i, j);
     }
   }
 
-  REP(i, H) {
-    REP(k, W) {
-      if(a[i][k] == '.' || a[i][k] == '#' || a[i][k] == 'S' || a[i][k] == 'G') continue;
-      s[a[i][k]] = min(s[a[i][k]], res_s[i][k]);
+  while(!q.empty()) {
+    // 今から見る座標を取得する
+    int i = q.front().first; int j = q.front().second;
+    // queueから先頭を取り除く
+    q.pop();
+    // ゴールなら今いる位置の数字を出力する
+    if(a[i][j] == 'G') {
+      cout << dist[i][j] << endl;
+      return 0;
+    }
+    //上下4方向を探索する
+    REP(v, 4) {
+      int ni = i + dx[v]; int nj = j + dy[v];
+      if(ni < 0 || ni >= H || nj < 0 || nj >= W) continue; // 範囲外ならループをスキップ
+      if(a[ni][nj] == '#') continue; // 壁ならループをスキップ
+      if(dist[ni][nj] != INF) continue;
+      dist[ni][nj] = dist[i][j] + 1;
+      q.emplace(ni, nj);
+    }
+
+    if(islower(a[i][j])) { // 英字小文字なら...
+      for(P p: warps[a[i][j]]) { // warpできる文字の位置を全探索する
+        int ni = p.first; int nj = p.second;
+        if(dist[ni][nj] != INF) continue;
+        dist[ni][nj] = dist[i][j] + 1;
+        q.emplace(ni, nj);
+      }
+      warps[a[i][j]].clear(); // 一度使ったワープ先は空にする
     }
   }
-
-  REP(i, H) {
-    REP(k, W) {
-      if(a[i][k] == '.' || a[i][k] == '#' || a[i][k] == 'S' || a[i][k] == 'G') continue;
-      g[a[i][k]] = max(s[a[i][k]], res_g[i][k]);
-    }
-  }
-
-  REP(i, H) {
-    REP(k, W) {
-      if(a[i][k] == '.' || a[i][k] == '#' || a[i][k] == 'S' || a[i][k] == 'G') continue;
-      g[a[i][k]] = min(s[a[i][k]], res_g[i][k]);
-    }
-  }
-
-  for(auto x : s) {
-    int p = x.second + g[x.first];
-    ans = min(ans, p);
-  }
-  
-  if(res_s[gx][gy] == -1) cout << -1 << endl;
-  else cout << min(ans, res_s[gx][gy]) << endl;
+  cout << -1 << endl;
 }
