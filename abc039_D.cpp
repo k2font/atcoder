@@ -38,26 +38,58 @@ int main() {
   // 与えられた画素データから変換前画像を作成する
   // 周囲8マスがすべて黒なら、そのマスは変換前も黒である。
   vector<string> before(H), after(H);
-  before = S;
+  REP(i, H) {
+    string t = "";
+    REP(k, W) t += '.';
+    before[i] = t; after[i] = t;
+  }
   REP(i, H) {
     REP(k, W) {
+      bool f = false;
+      if(S[i][k] == '.') continue;
       REP(m, 8) {
         int x = i + dx[m]; int y = k + dy[m];
-        if(x < 0 || x >= H) continue;
-        if(y < 0 || y >= W) continue;
-        if(S[x][y] == '.') break;
-        if(m == 7) {
-          REP(p, 8) {
-            int x = i + dx[p]; int y = k + dy[p];
-            if(x < 0 || x >= H) continue;
-            if(y < 0 || y >= W) continue;
-            before[x][y] = '.';
-          }
+        if(x < 0 || x >= H || y < 0 || y >= W) continue;
+        if(S[x][y] == '.') {
+          f = true;
+          break;
         }
+      }
+      if(f == false) {
+        before[i][k] = '#';
       }
     }
   }
 
   // 最後に、完成した変換前画像に変換を施し、与えられた画像と一致したらpossible。
-  
+  bool f = false;
+  REP(i, H) {
+    REP(k, W) {
+      if(before[i][k] == '#') {
+        after[i][k] = '#';
+        REP(m, 8) {
+          int x = i + dx[m]; int y = k + dy[m];
+          if(x < 0 || x >= H || y < 0 || y >= W) continue;
+          after[x][y] = '#';
+        }
+      }
+    }
+  }
+  REP(i, H) {
+    REP(k, W) {
+      if(after[i][k] != S[i][k]) f = true;
+    }
+  }
+
+  if(f == true) {
+    cout << "impossible" << endl;
+  } else {
+    cout << "possible" << endl;
+    REP(i, H) {
+      REP(k, W) {
+        cout << before[i][k];
+      }
+      cout << endl;
+    }
+  }
 }

@@ -36,31 +36,29 @@ struct edge {
 };
 
 int main() {
+  int X, Y; cin >> X >> Y;
   int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
+  vector<int> x(N), y(N); REP(i, N) cin >> x[i] >> y[i];
+  double ans = 100000000;
+  REP(i, N) {
+    if(i == N - 1) {
+      double d = 0;
+      double a = 0;
+      if(x[0] - x[i] != 0) {
+        a = (double)(y[0] - y[i]) / (double)(x[0] - x[i]);
+      } else {
+        a = (double)(y[0] - y[i]);
       }
-      cout << endl;
+      double b = abs(a * X - Y - x[i] * a + y[i]);
+      d = b / sqrt(a * a + 1);
+      ans = min(d, ans);
+      continue;
     }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
-      }
-    }
+    double d = 0;
+    double a = (double)(y[i + 1] - y[i]) / (double)(x[i + 1] - x[i]);
+    double b = abs(a * X - Y - x[i] * a + y[i]);
+    d = b / sqrt(a * a + 1);
+    ans = min(d, ans);
   }
+  cout << fixed << setprecision(15) << ans << endl;
 }

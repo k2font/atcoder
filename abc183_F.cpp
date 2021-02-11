@@ -35,58 +35,68 @@ struct edge {
   ll to, cost;
 };
 
-
 // UnionFindを示す構造体
 // 2020/11/10: 連結成分の個数を出力するよう修正した
 struct UnionFind {
   private:
-    int _n;
+    ll _n;
     // root node: -1 * component size
     // otherwise: parent
-    std::vector<int> par;
+    std::vector<ll> par, w;
 
   public:
     UnionFind() : _n(0) {}
-    UnionFind(int n) : _n(n), par(n, -1) {}
+    UnionFind(ll n) : _n(n), par(n, -1), w(n, 0) {}
 
-    int root(int x) {
+    ll root(ll x) {
         if (par[x] < 0) return x;
         return par[x] = root(par[x]);
     }
     
-    bool issame(int x, int y) {
+    bool issame(ll x, ll y) {
         return root(x) == root(y);
     }
     
-    bool merge(int x, int y) {
+    bool merge(ll x, ll y) {
         x = root(x); y = root(y);
-        if (x == y) return false;
+        if (x == y) {
+          ++w[x];
+          return false;
+        }
         if (par[x] > par[y]) swap(x, y); // merge technique
         par[x] += par[y];
         par[y] = x;
+        w[x] += w[y];
+        ++w[x];
         return true;
     }
     
-    int size(int x) {
+		// 頂点の数
+    ll size(ll x) {
         return -par[root(x)];
     }
+
+		// 辺の数
+		int wei(int x) {
+        return w[root(x)];
+    }
     
-    std::vector<std::vector<int>> groups() {
-        std::vector<int> leader_buf(_n), group_size(_n);
-        for (int i = 0; i < _n; i++) {
+    std::vector<std::vector<ll>> groups() {
+        std::vector<ll> leader_buf(_n), group_size(_n);
+        for (ll i = 0; i < _n; i++) {
             leader_buf[i] = root(i);
             group_size[leader_buf[i]]++;
         }
-        std::vector<std::vector<int>> result(_n);
-        for (int i = 0; i < _n; i++) {
+        std::vector<std::vector<ll>> result(_n);
+        for (ll i = 0; i < _n; i++) {
             result[i].reserve(group_size[i]);
         }
-        for (int i = 0; i < _n; i++) {
+        for (ll i = 0; i < _n; i++) {
             result[leader_buf[i]].push_back(i);
         }
         result.erase(
             std::remove_if(result.begin(), result.end(),
-                           [&](const std::vector<int>& v) { return v.empty(); }),
+                           [&](const std::vector<ll>& v) { return v.empty(); }),
             result.end());
         return result;
     }
@@ -105,14 +115,17 @@ int main() {
     int q, a, b; cin >> q >> a >> b;
     a--; b--;
     if(q == 1) {
-      a = uf.leader(a); // aの祖先
-      b = uf.leader(b); // bの祖先
-      if(a != b) { // aとbが同じグループにいなければ...
-        uf.merge(a, b); // 2つをマージする
-        for(auto tmp: m[b]) m[a][tmp.first] += tmp.second;
-      }
+      if(uf.issame(a, b)) continue;
+      int A = uf.root(a); // aの祖先
+      int B = uf.root(b); // bの祖先
+      uf.merge(A, B);
+
+      if(uf.root(B) == B) swap(A, B);
+
+      for(auto x : m[B]) m[A][x.first] += x.second;
     } else if(q == 2) {
-      cout << m[uf.leader(a)][b] << endl;
+      if(m[uf.root(a)].count(b)) cout << m[uf.root(a)][b] << endl;
+      else cout << 0 << endl;
     }
   }
 }

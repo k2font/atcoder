@@ -36,31 +36,28 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
-      }
+  int H, W; cin >> H >> W;
+  ll A, B; cin >> A >> B;
+  vector<vector<int>> ans(H, vector<int>(W, 0));
+  REP(i, B) {
+    REP(k, A) {
+      ans.at(i).at(k) = 0;
     }
   }
-}
+  for(int i = 0; i < B; ++i) {
+    for(int k = A; k < W; ++k) {
+      ans.at(i).at(k) = 1;
+    }
+  }
+  for(int i = B; i < H; ++i) {
+    for(int k = 0; k < A; ++k) {
+      ans.at(i).at(k) = 1;
+    }
+  }
+  REP(i, H) {
+    REP(k, W) {
+      cout << ans.at(i).at(k);
+    }
+    cout << endl;
+  }
+} 

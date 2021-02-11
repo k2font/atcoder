@@ -36,31 +36,30 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
-      }
-    }
+  double P; cin >> P;
+  // 3分探索
+  // 目的関数
+  auto f = [P](double x) {
+    return x + P / pow(2, x / 1.5);
+  };
+
+  // 左端
+  double low = 0;
+
+  // 右側
+  double high = 1e10;
+
+  // とりあえず1000回繰り返す
+  int c = 1000;
+  while (--c) {
+    double c1 = (low * 2 + high) / 3;
+    double c2 = (low + high * 2) / 3;
+
+    // もしf(c2)のほうが小さいなら、lowを更新する
+    if(f(c1) > f(c2)) low = c1;
+    else high = c2;
+    // cout << fixed << setprecision(15) << f(high) << endl;
   }
+
+  cout << fixed << setprecision(15) << f(high) << endl;
 }

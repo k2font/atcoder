@@ -99,43 +99,12 @@ struct SieveOfEratosthenes : std::vector<int> {
 };
 SieveOfEratosthenes sieve(1000000);
 
-bool IsPrime(ll num){
-  if (num < 2) return false;
-  else if (num == 2) return true;
-  else if (num % 2 == 0) return false; // 偶数はあらかじめ除く
-
-  double sqrtNum = sqrt(num);
-  for (ll i = 3; i <= sqrtNum; i += 2) {
-    if (num % i == 0) {
-      // 素数ではない
-      return false;
-    }
-  }
-
-  // 素数である
-  return true;
-}
-
 int main() {
-  ll A, B; cin >> A >> B;
-  auto x = sieve.Divisors(A);
-  auto y = sieve.Divisors(B);
-  vector<ll> t;
-
-  // 公約数を求める
-  REP(i, x.size()) {
-    REP(k, y.size()) {
-      if(x[i] == y[k]) {
-        t.push_back(x[i]);
-        break;
-      }
-    }
-  }
-
-  // 公約数から互いに素な数を数える(1と素数を出力する)
-  int ans = 0;
-  REP(i, t.size()) {
-    if(IsPrime(t[i]) == true) ++ans;
-  }
-  cout << ans + 1 << endl;
+  ll N; cin >> N;
+  vector<ll> a = sieve.Divisors(N);
+  ll ans = 0;
+  for(int i = 0; i < a.size(); ++i) {
+    if(a[i] % 2 == 1) ++ans;
+  } 
+  cout << ans * 2 << endl;
 }

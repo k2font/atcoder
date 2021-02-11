@@ -5,8 +5,8 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
-const int dx[4] = {1, 0, -1, 0};
-const int dy[4] = {0, -1, 0, 1};
+const int dx[4] = {1, 1, -1, -1};
+const int dy[4] = {1, -1, -1, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
@@ -36,10 +36,18 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  vector<string> S(N); REP(i, N) cin >> S[i];
-  REP(i, N) reverse(all(S[i]));
-  sort(all(S));
-  REP(i, N) reverse(all(S[i]));
-  REP(i, N) cout << S[i] << endl;
+  int H, W; cin >> H >> W;
+  vector<string> S(H); REP(i, H) cin >> S[i];
+  int ans = 0;
+  REP(i, H) {
+    REP(k, W) {
+      int tmp = 0;
+      if(S[i][k] == '#') tmp++;
+      if(i + 1 < H && S[i + 1][k] == '#') tmp++;
+      if(k + 1 < W && S[i][k + 1] == '#') tmp++;
+      if(i + 1 < H && k + 1 < W && S[i + 1][k + 1] == '#') tmp++;
+      if(tmp == 1 || tmp == 3) ans++;
+    }
+  }
+  cout << ans << endl;
 }

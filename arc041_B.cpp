@@ -36,31 +36,30 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
+  int N, M; cin >> N >> M;
+  vector<vector<int>> b(N, vector<int>(M));
+  REP(i, N) {
+    string s; cin >> s;
+    REP(k, M) {
+      int a = char_to_int(s[k]);
+      b[i][k] = a;
     }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
+  }
+  vector<vector<int>> a(N, vector<int>(M));
+  REP(i, N) {
+    REP(k, M) {
+      if(b[i][k] > 0) {
+        a[i + 1][k] += b[i][k];
+        int a = b[i][k];
+        b[i][k] -= a; b[i + 1][k - 1] -= a;
+        b[i + 1][k + 1] -= a; b[i + 2][k] -= a;
       }
     }
   }
-}
+  REP(i, N) {
+    REP(k, M) {
+      cout << a[i][k];
+    }
+    cout << endl;
+  }
+} 

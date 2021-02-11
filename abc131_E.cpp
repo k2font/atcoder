@@ -37,5 +37,24 @@ struct edge {
 
 int main() {
   int N, K; cin >> N >> K;
-  
+  vector<pair<int, int>> ans;
+  if((N - 1) * (N - 2) * 0.5 < K) {
+    cout << -1 << endl;
+    return 0;
+  } else {
+    REP(i, N - 1) ans.emplace_back(i + 1, N);
+    int rem = (N - 1) * (N - 2) * 0.5 - K;
+    int ci = 1; int cj = 2;
+    REP(i, rem) {
+      ans.emplace_back(ci, cj);
+      ++cj;
+      if(cj == N) {
+        ci++; cj = ci + 1;
+      }
+    }
+  }
+  cout << ans.size() << endl;
+  REP(i, ans.size()) {
+    cout << ans[i].first << " " << ans[i].second << endl;
+  }
 }

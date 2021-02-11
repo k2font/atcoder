@@ -36,31 +36,15 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
-      }
-    }
+  string S; cin >> S;
+  map<char, int> m;
+  REP(i, S.size()) {
+    m[S[i]]++;
   }
+  int cnt = 0; // 個数が奇数の数
+  for(auto x : m) {
+    if(x.second % 2 == 1) cnt++;
+  }
+  if(cnt == 0) cout << S.size() << endl;
+  else cout << 2 * ((S.size() - cnt) / (2 * cnt)) + 1 << endl;
 }

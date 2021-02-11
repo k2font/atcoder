@@ -5,11 +5,17 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -89,19 +95,59 @@ template<int MOD> struct Fp {
 const int MOD = 1'000'000'007;
 using mint = Fp<MOD>;
 
+template<class T> struct BiCoef {
+    vector<T> fact_, inv_, finv_;
+    constexpr BiCoef() {}
+    constexpr BiCoef(int n) noexcept : fact_(n, 1), inv_(n, 1), finv_(n, 1) {
+        init(n);
+    }
+    constexpr void init(int n) noexcept {
+        fact_.assign(n, 1), inv_.assign(n, 1), finv_.assign(n, 1);
+        int MOD = fact_[0].getmod();
+        for(int i = 2; i < n; i++){
+            fact_[i] = fact_[i-1] * i;
+            inv_[i] = -inv_[MOD%i] * (MOD/i);
+            finv_[i] = finv_[i-1] * inv_[i];
+        }
+    }
+    constexpr T com(int n, int k) const noexcept {
+        if (n < k || n < 0 || k < 0) return 0;
+        return fact_[n] * finv_[k] * finv_[n-k];
+    }
+    constexpr T fact(int n) const noexcept {
+        if (n < 0) return 0;
+        return fact_[n];
+    }
+    constexpr T inv(int n) const noexcept {
+        if (n < 0) return 0;
+        return inv_[n];
+    }
+    constexpr T finv(int n) const noexcept {
+        if (n < 0) return 0;
+        return finv_[n];
+    }
+};
+
+BiCoef<mint> bc; // 初期化
+
 int main() {
   int N; cin >> N;
-  vector<ll> A(N); REP(i, N) cin >> A[i];
-  mint ans = 0;
-  REP(d, 60) {
-    mint n0 = 0; mint n1 = 0;
-    REP(i, N) {
-      if((A[i] >> d) & 1) n1 = n1 + 1;
-      else n0 = n0 + 1;
-    }
-    mint tmp = (1LL << d); // 2^dの計算
-    mint n = n0 * n1 * tmp;
-    ans += n;
+  vector<int> T(N); REP(i, N) cin >> T[i];
+  bc.init(1000000);
+  ll res = 0;
+  mint ans = 1;
+  map<ll, ll> m;
+  REP(i, N) {
+    m[T[i]]++;
   }
+  ll tmp = 0;
+  for(auto x : m) {
+    for(int i = 0; i < x.second; ++i) {
+      tmp += x.first;
+      res += tmp;
+    }
+    ans *= bc.fact(x.second);
+  }
+  cout << res << endl;
   cout << ans << endl;
-}
+} 

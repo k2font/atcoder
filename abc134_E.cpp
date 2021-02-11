@@ -35,32 +35,20 @@ struct edge {
   ll to, cost;
 };
 
+// dp[i] := 長さが i の増加部分列として最後尾の要素のとりうる最小値
+template<class T> int LIS(vector<T> a,  bool is_strong = true) {
+    const T INF = 1<<30; // to be set appropriately
+    int n = (int)a.size();
+    vector<T> dp(n, INF);
+    for (int i = 0; i < n; ++i) {
+        if (is_strong) *lower_bound(dp.begin(), dp.end(), a[i]) = a[i];
+        else *upper_bound(dp.begin(), dp.end(), a[i]) = a[i];
+    }
+    return lower_bound(dp.begin(), dp.end(), INF) - dp.begin();
+}
+
 int main() {
   int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
-      }
-    }
-  }
+  vector<ll> A(N); REP(i, N) cin >> A[i]; reverse(all(A));
+  cout << LIS(A, false) << endl; 
 }

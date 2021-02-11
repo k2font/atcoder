@@ -36,31 +36,28 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
+  int N; cin >> N; int M; cin >> M;
+  vector<ll> A(M), B(M); REP(i, M) cin >> A[i] >> B[i];
+  int K; cin >> K;
+  vector<ll> C(K), D(K); REP(i, K) cin >> C[i] >> D[i];
+  // bit全探索
+  // bitに1が立っていればDにボールを入れる
+  ll ans = 0; // 最大いくつの条件が満たされているか
+  // bit全探索
+  for(int bit = 0; bit < (1 << K); ++bit) {
+    vector<ll> t(N + 1, 0);
+    for(int i = 0; i < K; ++i) {
+      if(bit & (1 << i)) {
+        t[C[i]]++;
+      } else {
+        t[D[i]]++;
       }
     }
+    ll res = 0;
+    REP(i, M) {
+      if(t[A[i]] > 0 && t[B[i]] > 0) res++;
+    }
+    chmax(ans, res);
   }
+  cout << ans << endl;
 }

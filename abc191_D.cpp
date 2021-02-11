@@ -36,31 +36,18 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
-        }
-        cout << endl;
-      }
-    }
+  long double X, Y, R; cin >> X >> Y >> R;
+  X = round(X * 10000); Y *= round(Y * 10000); R *= round(R * 10000);
+  ll low = ceil(X - R);
+  ll high = floor(X + R);
+  ll p = 0; ll num = 0;
+  for(int i = low; i <= high; i += 10000){
+    ll idx = i;
+    p = round(sqrt(R * R - ((X - idx) * (X - idx))));
+    ll bottom = ceil(Y - p);
+    ll top = floor(Y + p);
+    bottom /= 10000; top /= 10000;
+    num += ((top - bottom) + 1);
   }
+  cout << num << endl;
 }

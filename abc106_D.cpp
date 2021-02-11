@@ -38,12 +38,22 @@ int main() {
   int N, M, Q; cin >> N >> M >> Q;
   vector<int> L(M), R(M); REP(i, M) cin >> L[i] >> R[i];
   vector<int> p(Q), q(Q); REP(i, Q) cin >> p[i] >> q[i];
-  vector<int> res(N + 1, 0);
+  vector<vector<ll>> res(N + 1, vector<ll>(N + 1, 0));
   REP(i, M) {
-    res[L[i] - 1]++; res[R[i]]--;
+    res[L[i]][R[i]]++;
   }
-  REP(i, N) res[i + 1] += res[i];
-  for(int i = 0; i < N + 1; ++i) {
-    cout << res[i] << endl;
+  // 二次元累積和
+  REP(i, N + 1) {
+    if(i == 0) continue;
+    REP(k, N + 1) {
+      if(k == 0) continue;
+      res[i][k] += res[i - 1][k] + res[i][k - 1] - res[i - 1][k - 1];
+    }
+  }
+  ll ans = 0;
+  REP(i, Q) {
+    ans = 0;
+    ans += (res[q[i]][q[i]] - res[q[i]][p[i] - 1] - res[p[i] - 1][q[i]] + res[p[i] - 1][p[i] - 1]);
+    cout << ans << endl;
   }
 }

@@ -37,30 +37,45 @@ struct edge {
 
 int main() {
   int N; cin >> N;
-  if(N % 3 != 0) {
-    cout << "No" << endl;
-  } else {
-    int n = N / 3; // 集合1つ分に含まれる要素数
-    cout << "Yes" << endl;
-    cout << 3 + (n + 1 - 2) << endl;
-    for(int m = 0; m < N; m += n) {
-      cout << n + 1 << " ";
-      REP(i, n + 1) {
-        if(m + 1 + i > N) cout << 1;
-        else cout << m + 1 + i;
-        if(i != n) cout << " ";
-      }
-      cout << endl;
-    }
-    if(N >= 4) {
-      for(int i = 2; i < n + 1; ++i) {
-        cout << n << " ";
-        REP(k, 3) {
-          cout << i + k * n;
-          if(k != 2) cout << " ";
+  int R; cin >> R;
+  string S; cin >> S;
+  int ans = 0;
+  
+  int q = 0;
+  REP(i, N) {
+    if(S[i] == '.') q = i;
+  }
+  q++;
+
+  int c = 0;
+  REP(i, N) {
+    if(S[i] == 'o') c++;
+  }
+  if(c == N) {
+    cout << 0 << endl;
+    return 0;
+  }
+
+  int tmp = q - R;
+  if(S == "o") {
+    cout << 0 << endl;
+    return 0;
+  }
+  if(tmp < 0) {
+    cout << 1 << endl;
+    return 0;
+  }
+  REP(i, N) {
+    // そこがまだ塗られていなかったら、インク発射
+    if(S[i] == '.') {
+      for(int k = i; k < i + R; ++k) {
+        if(k >= N) continue;
+        if(S[k] == '.') {
+          S[k] = 'o';
         }
-        cout << endl;
       }
+      ans++;
     }
   }
+  cout << ans + tmp << endl;
 }
