@@ -1,53 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Radix {
-private:
-  const char* s;
-  int a[128];
-  
-public:
-  Radix(const char* s = "0123456789ABCDEF") : s(s) {
-    int i;
-    for(i = 0; s[i]; ++i)
-      a[(int)s[i]] = i;
+#define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
+#define all(x) (x).begin(),(x).end()
+using ll = long long;
+using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
+    return true;
   }
-
-  std::string to(long long p, int q) {
-    int i;
-    if(!p)
-      return "0";
-    char t[64] = { };
-    for(i = 62; p; --i) {
-      t[i] = s[p % q];
-      p /= q;
-    }
-    return std::string(t + i + 1);
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
   }
-
-  std::string to(const std::string& t, int p, int q) {
-    return to(to(t, p), q);
-  }
-
-  long long to(const std::string& t, int p) {
-    int i;
-    long long sm = a[(int)t[0]];
-    for(i = 1; i < (int)t.length(); ++i)
-      sm = sm * p + a[(int)t[i]];
-    return sm;
-  }
+  return false;
+}
+struct edge {
+  ll to, cost;
 };
 
-int main(){
-    int N, K; cin >> N >> K;
+int digits(ll tar, ll digit) {
+  int ans = 0;
+  while(tar > 0) {
+    tar /= digit;
+    ans++;
+  }
+  return ans;
+}
 
-    Radix r;
-
-    string m = r.to(N, K);
-    int cnt = 0;
-    for(int i = 0; i < m.size(); ++i) {
-        cnt++;
-    }
-
-    cout << cnt << endl;
+int main() {
+  ll N, K; cin >> N >> K;
+  cout << digits(N, K) << endl;
 }

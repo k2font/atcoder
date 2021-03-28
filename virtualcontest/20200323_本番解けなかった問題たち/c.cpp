@@ -5,11 +5,17 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -28,32 +34,27 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
-ll INF = 2e18;
-ll mul(ll a, ll b) {
-  if(a == 0 or b == 0) return 0;
-  if(INF / a < b) return INF;
-  return a * b;
-}
 
 int main() {
-  ll X, Y; cin >> X >> Y;
-  ll A, B; cin >> A >> B;
-  ll ans = 0;
-  if(X >= B) {
-    ans = ((Y - 1) - X) / B;
-  } else {
-    // 増分がBに達するまでAをかける
-    ll cnt = 0;
-    while(true) {
-      if(mul(A, X) >= X + B) break;
-      if(mul(A, X) >= Y) break;
-      X *= A;
-      cnt++;
-    }
-    ans += cnt;
-    // ここから残りをB足す
-    ll tmp = (Y - 1) - X;
-    ans += (tmp / B);
+  ll N; cin >> N;
+  vector<ll> A(N); REP(i, N) cin >> A[i];
+  ll tmp = abs(A[0]);
+  REP(i, N - 1) {
+    tmp += abs(A[i] - A[i + 1]);
   }
-  cout << ans << endl;
+  tmp += abs(A[N - 1]); // 帰り
+  REP(i, N) {
+    ll ans = tmp;
+    if(i == 0) {
+      ans -= abs(0 - A[i]); ans -= abs(A[i] - A[i + 1]);
+      ans += abs(0 - A[i + 1]);
+    } else if(i == N - 1) {
+      ans -= abs(0 - A[i]); ans -= abs(A[i] - A[i - 1]);
+      ans += abs(0 - A[i - 1]);
+    } else {
+      ans -= abs(A[i - 1] - A[i]); ans -= abs(A[i] - A[i + 1]);
+      ans += abs(A[i - 1] - A[i + 1]);
+    }
+    cout << ans << endl;
+  }
 }

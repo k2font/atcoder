@@ -1,2 +1,2 @@
 
-    if(i + 1 - bit.sum(1, a[i] + 1) > 0) tmp++;
+  double mot = (double)(N - c1 - c2 - c3) / (double)N;

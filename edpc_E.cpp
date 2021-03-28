@@ -35,40 +35,24 @@ struct edge {
   ll to, cost;
 };
 
-// 多次元 vector 生成を行うテンプレート
-template<class T>
-vector<T> make_vec(size_t a){
-    return vector<T>(a);
-}
-template<class T, class... Ts>
-auto make_vec(size_t a, Ts... ts){
-  return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));
-}
-
-const ll INF = 1e18;
-const int MAX_N = 110;
-const int MAX_V = 100100;
 int main() {
-  ll N, W; cin >> N >> W;
+  ll N, W; cin >> N >> W; const ll INF = 1000000000000;
   vector<ll> w(N), v(N); REP(i, N) cin >> w[i] >> v[i];
-  auto dp = make_vec<ll>(MAX_N, MAX_V);
-  REP(i, MAX_N) {
-    REP(k, MAX_V) {
-      dp[i][k] = INF;
-    }
-  }
+  vector<vector<ll>> dp(N + 100, vector<ll>(101000, INF)); // 品物i番目を取ってその時の価値の合計がkのときの、重さの最小値
   dp[0][0] = 0;
-  REP(i, N) {
-    REP(k, MAX_V) {
+  for(int i = 0; i < N; ++i) {
+    for(int k = 0; k <= 100001; ++k) { // 100 * 1000 = 10^5くらい
+      // 品物を取るとき
       if(k - v[i] >= 0) chmin(dp[i + 1][k], dp[i][k - v[i]] + w[i]);
-      chmin(dp[i + 1][k], dp[i][k]);
+      chmin(dp[i + 1][k], dp[i][k]); // 品物を取らないとき
     }
   }
-  ll ans = 0;
-  REP(k, MAX_V) {
+
+  // dp[N][k]をkが大きい順に見ていって、初めてW以下であればそれが答え
+  for(int k = 100001; k >= 0; --k) {
     if(dp[N][k] <= W) {
-      ans = k;
+      cout << k << endl;
+      break;
     }
   }
-  cout << ans << endl;
 }

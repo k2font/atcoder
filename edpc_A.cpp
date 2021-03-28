@@ -36,11 +36,10 @@ struct edge {
 };
 
 int main() {
-  ll N; cin >> N;
-  const ll INF = 1e9;
+  int N; cin >> N; const ll INF = 1e18;
   vector<ll> h(N); REP(i, N) cin >> h[i];
-  vector<ll> dp(N, INF); dp[0] = 0;
-  REP(i, N) {
+  vector<ll> dp(N + 100, INF); dp[0] = 0;
+  for(int i = 0; i < N; ++i) {
     if(i - 1 >= 0) chmin(dp[i], dp[i - 1] + abs(h[i] - h[i - 1]));
     if(i - 2 >= 0) chmin(dp[i], dp[i - 2] + abs(h[i] - h[i - 2]));
   }

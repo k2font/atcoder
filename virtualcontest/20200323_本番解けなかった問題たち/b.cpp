@@ -36,12 +36,19 @@ struct edge {
 };
 
 int main() {
-  int N, K; cin >> N >> K;
-  vector<ll> h(N); REP(i, N) cin >> h[i];
-  sort(all(h));
-  ll ans = 10000000000;
-  for(int i = 0; i < N - K + 1; ++i) {
-    chmin(ans, h[i + K - 1] - h[i]);
+  ll A, B, C, K; cin >> A >> B >> C >> K;
+  if(A > K) {
+    cout << K << endl;
+  } else {
+    ll ans = 0;
+    K -= A; ans += A;
+    if(K > 0) {
+      K -= B;
+    }
+    if(K > 0) {
+      ans -= K;
+      K -= C;
+    }
+    cout << ans << endl;
   }
-  cout << ans << endl;
 }

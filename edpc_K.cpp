@@ -5,11 +5,17 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -30,15 +36,5 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  int K; cin >> K;
-  vector<int> a(N); REP(i, N) cin >> a[i];
-  vector<int> dp(K + 100, 0);
-  REP(i, K + 1) {
-    REP(m, N) {
-      if(i - a[m] >= 0 && dp[i - a[m]] == 0) dp[i] = 1;
-    }
-  }
-  if(dp[K] == 1) cout << "First" << endl;
-  else cout << "Second" << endl;
+  
 }

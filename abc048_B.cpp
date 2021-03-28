@@ -4,11 +4,18 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -24,26 +31,14 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
-int vector_finder(std::vector<ll> vec, int number) {
-  auto itr = std::find(vec.begin(), vec.end(), number);
-  size_t index = std::distance( vec.begin(), itr );
-  if (index != vec.size()) { // 発見できたとき
-    return 1;
-  }
-  else { // 発見できなかったとき
-    return 0;
-  }
-}
+struct edge {
+  ll to, cost;
+};
 
 int main() {
   ll a, b, x; cin >> a >> b >> x;
-  ll ans1 = b / x;
-  ll ans2 = 0;
-  if(a != 0) ans2 = (a - 1) / x;
-  else {
-    ans2 = 0;
-    ans1++;
-  }
-  ll ans = ans1 - ans2;
+  ll t = 0;
+  if(a != 0) t = (a - 1) / x + 1;
+  ll ans = (b / x) + 1 - t;
   cout << ans << endl;
 }

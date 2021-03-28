@@ -25,27 +25,10 @@ int lcm(int a, int b) {
 int main(){
     ll N, X; cin >> N >> X;
     vector<ll> x(N); REP(i, N) cin >> x[i];
-
-    ll res = pow(10, 9.0) + 7;
-
-    sort(all(x));
-
-    for(int i = 0; i < N; ++i) {
-        int tmp = abs(X - x[i]);
-        if(res > tmp) res = tmp;
+    ll ans = 0;
+    REP(i, N) {
+        ll t = abs(X - x[i]);
+        ans = gcd(ans, t);
     }
-
-    for(int i = 0; i < N - 1; ++i) {
-        ll a = abs(x[i] - x[i + 1]) % res;
-        if(a != 0) {
-            ll b = res % abs(x[i] - x[i + 1]);
-            if(b == 0) {
-                res = abs(x[i] - x[i + 1]);
-            } else {
-                res = gcd(abs(x[i] - x[i + 1]), res);
-            }
-        }
-    }
-
-    cout << res << endl;
+    cout << ans << endl;
 }

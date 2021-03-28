@@ -41,8 +41,9 @@ ll lcm(ll a, ll b) {
 
 int main() {
   ll N; cin >> N;
-  ll ans = 2;
-  for(int i = 2; i <= N; ++i) {
+  ll ans = 1;
+  REP(i, N + 1) {
+    if(i == 0) continue;
     ans = lcm(ans, i);
   }
   cout << ans + 1 << endl;

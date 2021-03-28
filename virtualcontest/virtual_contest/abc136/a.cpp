@@ -36,14 +36,11 @@ struct edge {
 };
 
 int main() {
+  int K; cin >> K;
   string S; cin >> S;
-  map<char, int> m;
-  REP(i, S.size()) {
-    m[S[i]]++;
+  if(S.size() <= K) {
+    cout << S << endl;
+  } else {
+    cout << S.substr(0, K) << "..." << endl;
   }
-  string ans = "Yes";
-  for(auto x : m) {
-    if(x.second != 2) ans = "No";
-  }
-  cout << ans << endl;
 }

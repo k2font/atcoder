@@ -36,12 +36,15 @@ struct edge {
 };
 
 int main() {
-  string s1, s2; cin >> s1 >> s2;
-  vector<vector<int>> dp(s1.size() + 1, vector<int>(s2.size() + 1));
+  // LCS!!!
+  string s, t; cin >> s >> t;
+  vector<vector<ll>> dp(s.size() + 1, vector<ll>(t.size() + 1, 0));
 
-  REP(i, s1.size()) {
-    REP(k, s2.size()) {
-      if(s1[i] == s2[k]) chmax(dp[i + 1][k + 1], dp[i][k] + 1);
+  REP(i, s.size()) {
+    REP(k, t.size()) {
+      // もしいま見ている位置が一致すれば...
+      if(s[i] == t[k]) chmax(dp[i + 1][k + 1], dp[i][k] + 1); // どちらの文字も採用する
+      // そうでない場合、sとtのどちらかの文字を捨てる
       chmax(dp[i + 1][k + 1], dp[i][k + 1]);
       chmax(dp[i + 1][k + 1], dp[i + 1][k]);
     }
@@ -49,14 +52,12 @@ int main() {
 
   // 復元する
   string ans = "";
-  int i = s1.size(); int k = s2.size();
+  ll i = s.size(); ll k = t.size();
   while(i > 0 && k > 0) {
-    if(dp[i - 1][k] == dp[i][k]) {
-      --i;
-    } else if(dp[i][k - 1] == dp[i][k]) {
-      --k;
-    } else {
-      ans = ans + s1[i - 1];
+    if(dp[i - 1][k] == dp[i][k]) --i;
+    else if(dp[i][k - 1] == dp[i][k]) --k;
+    else {
+      ans = ans + s[i - 1];
       --i; --k;
     }
   }

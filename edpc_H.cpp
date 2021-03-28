@@ -95,18 +95,26 @@ template<int MOD> struct Fp {
 const int MOD = 1'000'000'007;
 using mint = Fp<MOD>;
 
-// DPで解く。がんばる。
-// Knightの問題を参考にする
 int main() {
-  int H, W; cin >> H >> W;
+  ll H, W; cin >> H >> W;
   vector<string> a(H); REP(i, H) cin >> a[i];
-  vector<vector<mint>> dp(H, vector<mint>(W, 0)); dp[0][0] = 1;
+  vector<vector<mint>> dp(H + 10, vector<mint>(W + 10, 0));
+  REP(i, H) {
+    if(a[i][0] == '#') break;
+    dp[i][0] = 1;
+  }
+  REP(i, W) {
+    if(a[0][i] == '#') break;
+    dp[0][i] = 1;
+  }
+
   REP(i, H) {
     REP(k, W) {
+      if(i == 0 || k == 0) continue;
       if(a[i][k] == '#') continue;
-      if(i - 1 >= 0) dp[i][k] += dp[i - 1][k];
-      if(k - 1 >= 0) dp[i][k] += dp[i][k - 1];
+      dp[i][k] = dp[i - 1][k] + dp[i][k - 1];
     }
   }
+
   cout << dp[H - 1][W - 1] << endl;
 }

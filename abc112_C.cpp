@@ -43,18 +43,17 @@ int main() {
   vector<ll> x(N), y(N), h(N); REP(i, N) cin >> x[i] >> y[i] >> h[i];
   for(ll i = 0; i <= 100; ++i) {
     for(ll k = 0; k <= 100; ++k) {
-      ll res = 0;
+      ll res = 0; ll H = 1;
       REP(m, N) {
-        ll tmp = abs(i - x[m]) + abs(k - y[m]) + h[m];
-        if(m != 0 && tmp != res) break;
-        res = tmp;
-        ll t = abs(i - x[m]) + abs(k - y[m]);
-        if(h[m] > 0 && res - h[i] != t) break;
-        if(h[m] == 0 && res > t) break;
-        if(m == N - 1) {
-          cout << i << " " << k << " " << res << endl;
-          return 0;
-        }
+        if(h[m] > 0) H = abs(i - x[m]) + abs(k - y[m]) + h[m];
+      }
+      int ok = 1;
+      REP(m, N) {
+        if(max(H - abs(x[m] - i) - abs(y[m] - k), (ll)0) != h[m]) ok = 0;
+      }
+      if(ok) {
+        cout << i << " " << k << " " << H << endl;
+        return 0;
       }
     }
   }

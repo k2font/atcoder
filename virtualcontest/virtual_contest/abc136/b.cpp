@@ -35,16 +35,27 @@ struct edge {
   ll to, cost;
 };
 
+ll g1(ll n) {
+  string p = to_string(n);
+  sort(all(p)); reverse(all(p));
+  return stoll(p);
+}
+
+ll g2(ll n) {
+  string p = to_string(n);
+  sort(all(p));
+  return stoll(p);
+}
+
+ll f(ll n) {
+  return g1(n) - g2(n);
+}
+
 int main() {
-  int N, X; cin >> N >> X;
-  string S; cin >> S;
-  REP(i, N) {
-    if(X >= 0) {
-      if(S[i] == 'o') ++X;
-      else{
-        if(X > 0) --X;
-      }
-    }
+  ll N, K; cin >> N >> K;
+  ll ans = N;
+  REP(i, K) {
+    ans = f(ans);
   }
-  cout << X << endl;
+  cout << ans << endl;
 }

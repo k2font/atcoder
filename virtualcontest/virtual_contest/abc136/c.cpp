@@ -36,10 +36,15 @@ struct edge {
 };
 
 int main() {
-  int N; cin >> N;
-  vector<string> S(N); REP(i, N) cin >> S[i];
-  REP(i, N) reverse(all(S[i]));
-  sort(all(S));
-  REP(i, N) reverse(all(S[i]));
-  REP(i, N) cout << S[i] << endl;
+  ll N, K; cin >> N >> K;
+  vector<ll> p(N); REP(i, N) cin >> p[i];
+  vector<ll> rui(N + 1, 0);
+  REP(i, N) p[i]++;
+  REP(i, N) rui[i + 1] = rui[i] + p[i];
+  ll tmp = 0;
+  for(int i = 0; i + K <= N; ++i) {
+    tmp = max(tmp, rui[i + K] - rui[i]);
+  }
+  double ans = (double)tmp / (double)2.0;
+  cout << fixed << setprecision(10) << ans << endl;
 }

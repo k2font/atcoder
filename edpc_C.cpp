@@ -35,35 +35,19 @@ struct edge {
   ll to, cost;
 };
 
-// 多次元 vector 生成を行うテンプレート
-template<class T>
-vector<T> make_vec(size_t a){
-    return vector<T>(a);
-}
-template<class T, class... Ts>
-auto make_vec(size_t a, Ts... ts){
-  return vector<decltype(make_vec<T>(ts...))>(a, make_vec<T>(ts...));
-}
-
-const ll INF = 1e9;
 int main() {
-  int N; cin >> N;
+  ll N; cin >> N;
   vector<ll> a(N), b(N), c(N); REP(i, N) cin >> a[i] >> b[i] >> c[i];
-  auto dp = make_vec<ll>(N, 3); // 二次元配列を作成
-  REP(i, N) {
-    REP(k, 3) {
-      dp[i][k] = 0;
-    }
-  } // a: 0 b: 1 c: 2
+  vector<vector<ll>> dp(N + 100, vector<ll>(3, 0));
   dp[0][0] = a[0]; dp[0][1] = b[0]; dp[0][2] = c[0];
   REP(i, N) {
-    if(i == 0) continue;
-    chmax(dp[i][1], dp[i - 1][0] + b[i]); 
+    if(i - 1 < 0) continue;
+    chmax(dp[i][0], dp[i - 1][1] + a[i]);
+    chmax(dp[i][2], dp[i - 1][1] + c[i]);
+    chmax(dp[i][1], dp[i - 1][0] + b[i]);
     chmax(dp[i][2], dp[i - 1][0] + c[i]);
-    chmax(dp[i][0], dp[i - 1][1] + a[i]); 
-    chmax(dp[i][2], dp[i - 1][1] + c[i]); 
-    chmax(dp[i][0], dp[i - 1][2] + a[i]); 
-    chmax(dp[i][1], dp[i - 1][2] + b[i]); 
+    chmax(dp[i][0], dp[i - 1][2] + a[i]);
+    chmax(dp[i][1], dp[i - 1][2] + b[i]);
   }
   cout << max(dp[N - 1][0], max(dp[N - 1][1], dp[N - 1][2])) << endl;
 }

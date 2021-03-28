@@ -35,12 +35,10 @@ struct edge {
   ll to, cost;
 };
 
-const ll INF = 1e9;
 int main() {
-  int N; cin >> N;
-  int K; cin >> K;
-  vector<int> h(N); REP(i, N) cin >> h[i];
-  vector<ll> dp(N, INF); dp[0] = 0;
+  int N, K; cin >> N >> K; const ll INF = 2e18;
+  vector<ll> h(N); REP(i, N) cin >> h[i];
+  vector<ll> dp(N + 100, INF); dp[0] = 0;
   REP(i, N) {
     for(int k = 1; k <= K; ++k) {
       if(i - k < 0) continue;
