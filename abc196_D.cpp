@@ -37,7 +37,40 @@ struct edge {
   ll to, cost;
 };
 
+ll H, W, A, B;
+bool tmp[16][16];
+
+int ans = 0;
+ll dfs(int x, int y, int a) {
+  if(H == y) return a == 0;
+
+  if(W == x) return dfs(0, y + 1, a);
+
+  if(tmp[y][x] == true) return dfs(x + 1, y, a);
+
+  int res = 0;
+
+  // 縦
+  if(y + 1 < H && !tmp[y + 1][x] && 0 < a) {
+    tmp[y][x] = tmp[y + 1][x] = true;
+    res += dfs(x + 1, y, a - 1);
+    tmp[y][x] = tmp[y + 1][x] = false;
+  }
+
+  // 横
+  if(x + 1 < W && !tmp[y][x + 1] && 0 < a) {
+    tmp[y][x] = tmp[y][x + 1] = true;
+    res += dfs(x + 1, y, a - 1);
+    tmp[y][x] = tmp[y][x + 1] = false;
+  }
+
+  // 何も置かない
+  res += dfs(x + 1, y, a);
+
+  return res;
+}
+
 int main() {
-  ll H, W, A, B; cin >> H >> W >> A >> B;
-  
+  cin >> H >> W >> A >> B;
+  cout << dfs(0, 0, A) << endl;
 }

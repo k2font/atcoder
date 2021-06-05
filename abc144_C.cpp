@@ -4,45 +4,58 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
-
-bool IsPrime(ll num){
-    if (num < 2) return false;
-    else if (num == 2) return true;
-    else if (num % 2 == 0) return false; // 偶数はあらかじめ除く
-
-    double sqrtNum = sqrt(num);
-    for (ll i = 3; i <= sqrtNum; i += 2)
-    {
-        if (num % i == 0)
-        {
-            // 素数ではない
-            return false;
-        }
-    }
-
-    // 素数である
+using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
+string char_to_string(char val) {
+  return string(1, val);
+}
+int char_to_int(char val) {
+  return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
+}
+template<class T> inline bool chmin(T& a, T b) {
+  if (a > b) {
+    a = b;
     return true;
+  }
+  return false;
+}
+template<class T> inline bool chmax(T& a, T b) {
+  if (a < b) {
+    a = b;
+    return true;
+  }
+  return false;
+}
+struct edge {
+  ll to, cost;
+};
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
+
+vector<ll> divisor(ll n) {
+  vector<ll> ret;
+  for(ll i = 1; i * i <= n; i++) {
+    if(n % i == 0) {
+      ret.push_back(i);
+      if(i * i != n) ret.push_back(n / i);
+    }
+  }
+
+  sort(begin(ret), end(ret));
+  return (ret);
 }
 
-int main(){
-    ll N; cin >> N;
-
-    ll cnt = 0;
-    ll result = 1000000000007; // 10^12+7
-    double sqrtNum = sqrt(N);
-
-    if(IsPrime(N) == true) {
-        result = N - 1;
-    } else {
-        for(int i = 2; i <= sqrtNum; ++i) {
-            if(N % i == 0) {
-                cnt = (N / i) + i - 2;
-                if(result > cnt) {
-                    result = cnt;
-                }
-            }
-        }
-    }
-
-    cout << result << endl;
+int main() {
+  ll N; cin >> N;
+  auto d = divisor(N);
+  ll ans = 1e18;
+  for(auto x : d) {
+    ll tmp = N / x;
+    ans = min(ans, (x - 1) + (tmp - 1));
+  }
+  cout << ans << endl;
 }

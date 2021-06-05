@@ -5,11 +5,17 @@ using namespace std;
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
 using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -28,6 +34,7 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
 // modint: mod 計算を int を扱うように扱える構造体
 template<int MOD> struct Fp {
@@ -90,18 +97,18 @@ const int MOD = 1'000'000'007;
 using mint = Fp<MOD>;
 
 int main() {
-  int N; cin >> N;
+  ll N; cin >> N;
   vector<ll> A(N); REP(i, N) cin >> A[i];
   mint ans = 0;
   REP(d, 60) {
-    mint n0 = 0; mint n1 = 0;
-    REP(i, N) {
-      if((A[i] >> d) & 1) n1 = n1 + 1;
-      else n0 = n0 + 1;
+    mint p = 0; mint q = 0;
+    REP(k, N) {
+      if((A[k] >> d) & 1) p += 1;
+      else q += 1;
     }
-    mint tmp = (1LL << d); // 2^dの計算
-    mint n = n0 * n1 * tmp;
-    ans += n;
+    mint a = ((ll)1 << d);
+    mint tmp = p * q * a;
+    ans += tmp;
   }
   cout << ans << endl;
 }

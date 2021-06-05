@@ -4,11 +4,18 @@ using namespace std;
 #define REP(i,n) for(int i=0, i##_len=(n); i<i##_len; ++i)
 #define all(x) (x).begin(),(x).end()
 using ll = long long;
+using P = pair<ll, ll>;
+const int dx[4] = {1, 0, -1, 0};
+const int dy[4] = {0, -1, 0, 1};
 string char_to_string(char val) {
   return string(1, val);
 }
 int char_to_int(char val) {
   return val - '0';
+}
+char inverse_char(char c) {
+  if(isupper(c)) return tolower(c);
+  else return toupper(c);
 }
 template<class T> inline bool chmin(T& a, T b) {
   if (a > b) {
@@ -24,46 +31,21 @@ template<class T> inline bool chmax(T& a, T b) {
   }
   return false;
 }
+struct edge {
+  ll to, cost;
+};
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
 int main() {
   int A, B, C; cin >> A >> B >> C;
-  int first = 0;
-  int second = 0;
-  int third = 0;
-  if(A > B && A > C) {
-    first = 1;
-    if(B > C) {
-      second = 2;
-      third = 3;
-    } else {
-      second = 3;
-      third = 2;
-    }
+  vector<pair<ll, ll>> p;
+  p.push_back(make_pair(A, 0)); p.push_back(make_pair(B, 1)); p.push_back(make_pair(C, 2)); 
+  sort(all(p), greater<pair<ll, ll>>());
+  vector<ll> ans(3);
+  REP(i, 3) {
+    ans[p[i].second] = i + 1;
   }
-
-  if(B > A && B > C) {
-    second = 1;
-    if(A > C) {
-      first = 2;
-      third = 3;
-    } else {
-      first = 3;
-      third = 2;
-    }
+  REP(i, 3) {
+    cout << ans[i] << endl;
   }
-
-  if(C > A && C > B) {
-    third = 1;
-    if(A > B) {
-      first = 2;
-      second = 3;
-    } else {
-      first = 3;
-      second = 2;
-    }
-  }
-
-  cout << first << endl;
-  cout << second << endl;
-  cout << third << endl;
 }

@@ -38,20 +38,21 @@ struct edge {
 int main() {
   ll N; cin >> N;
   vector<ll> a(N), t(N); REP(i, N) cin >> a[i] >> t[i];
-  ll Q; cin >> Q; vector<ll> x(Q); REP(i, Q) cin >> x[i];
-
-  // これでは当然TLE。前処理をしたい。
-  REP(i, Q) {
-    ll f = x[i];
-    REP(k, N) {
-      if(t[k] == 1) {
-        f = f + a[k];
-      } else if(t[k] == 2) {
-        f = max(f, a[k]);
-      } else if(t[k] == 3) {
-        f = min(f, a[k]);
-      }
+  ll Q; cin >> Q;
+  vector<ll> x(Q); REP(i, Q) cin >> x[i];
+  ll low = -1e18; ll high = 1e18; ll add = 0;
+  REP(i, N) {
+    if(t[i] == 1) {
+      low += a[i]; high += a[i]; // t==1の操作はグラフを上に押し上げる操作。
+      add += a[i]; // t==1の操作はいつ行ってもいいので、とりあえずaddに貯めておく
+    } else if(t[i] == 2) {
+      chmax(low, a[i]); chmax(high, a[i]);
+    } else {
+      chmin(low, a[i]); chmin(high, a[i]);
     }
-    cout << f << endl;
+  }
+
+  REP(i, Q) {
+    cout << clamp(x[i] + add, low, high) << endl;
   }
 }

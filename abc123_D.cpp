@@ -37,35 +37,31 @@ struct edge {
 
 int main() {
   ll X, Y, Z, K; cin >> X >> Y >> Z >> K;
-  vector<ll> A(X); REP(i, X) cin >> A[i]; sort(all(A), greater<ll>());
-  vector<ll> B(Y); REP(i, Y) cin >> B[i]; sort(all(B), greater<ll>());
-  vector<ll> C(Z); REP(i, Z) cin >> C[i]; sort(all(C), greater<ll>());
-  using data = pair<ll, vector<ll>>;
+  vector<ll> A(X); REP(i, X) cin >> A[i];
+  vector<ll> B(Y); REP(i, Y) cin >> B[i];
+  vector<ll> C(Z); REP(i, Z) cin >> C[i];
+  sort(all(A), greater<ll>()); sort(all(B), greater<ll>()); sort(all(C), greater<ll>());
+  using data = pair<ll, vector<ll>>; map<vector<ll>, int> f;
   priority_queue<data> q;
-  map<vector<ll>, int> f;
-  q.push(make_pair(A[0] + B[0] + C[0], vector<ll>({0, 0, 0})));
-  q.push(make_pair(A[1] + B[0] + C[0], vector<ll>({1, 0, 0})));
-  q.push(make_pair(A[0] + B[1] + C[0], vector<ll>({0, 1, 0})));
-  q.push(make_pair(A[0] + B[0] + C[1], vector<ll>({0, 0, 1})));
-  f[vector<ll>({0, 0, 0})]++;
-  f[vector<ll>({1, 0, 0})]++;
-  f[vector<ll>({0, 1, 0})]++;
-  f[vector<ll>({0, 0, 1})]++;
+  q.emplace(A[0] + B[0] + C[0], vector<ll>({0, 0, 0})); f[vector<ll>({0, 0, 0})]++;
+  q.emplace(A[1] + B[0] + C[0], vector<ll>({1, 0, 0})); f[vector<ll>({1, 0, 0})]++;
+  q.emplace(A[0] + B[1] + C[0], vector<ll>({0, 1, 0})); f[vector<ll>({0, 1, 0})]++;
+  q.emplace(A[0] + B[0] + C[1], vector<ll>({0, 0, 1})); f[vector<ll>({0, 0, 1})]++;
   REP(i, K) {
     auto x = q.top(); q.pop();
     cout << x.first << endl;
     int a = x.second[0]; int b = x.second[1]; int c = x.second[2];
     if(f[vector<ll>({a + 1, b, c})] == 0 && a + 1 < X) {
-      q.push(make_pair(A[a + 1] + B[b] + C[c], vector<ll>({a + 1, b, c})));
+      q.emplace(A[a + 1] + B[b] + C[c], vector<ll>({a + 1, b, c}));
       f[vector<ll>({a + 1, b, c})]++;
     }
     if(f[vector<ll>({a, b + 1, c})] == 0 && b + 1 < Y) {
-      q.push(make_pair(A[a] + B[b + 1] + C[c], vector<ll>({a, b + 1, c})));
+      q.emplace(A[a] + B[b + 1] + C[c], vector<ll>({a, b + 1, c}));
       f[vector<ll>({a, b + 1, c})]++;
     }
     if(f[vector<ll>({a, b, c + 1})] == 0 && c + 1 < Z) {
-      q.push(make_pair(A[a] + B[b] + C[c + 1], vector<ll>({a, b, c + 1})));
+      q.emplace(A[a] + B[b] + C[c + 1], vector<ll>({a, b, c + 1}));
       f[vector<ll>({a, b, c + 1})]++;
     }
   }
-} 
+}
