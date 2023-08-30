@@ -34,33 +34,20 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
 int main() {
-  ll N; cin >> N;
+  int N; cin >> N;
   vector<ll> a(N); REP(i, N) cin >> a[i];
-  REP(i, N) --a[i];
-  vector<pair<ll, ll>> b(N);
+  ll res = 0;
   REP(i, N) {
-    b[i] = make_pair(a[i], i);
+    while(i + 1 != a[i]) {
+      int tmp = a[i];
+      a[i] = a[tmp - 1];
+      a[tmp - 1] = tmp;
+      res++;
+    }
   }
-  sort(all(b));
-  int c = 0;
-  REP(i, N) {
-    int p = b[i].second; // 確認する現在位置を定める
-    if(i == p) continue; // もしすでにその数がおいてあればcontinue;
-    swap(b[i].second, b[a[i]].second); // i番目とa[i]番目の位置を入れ替える
-    swap(a[p], a[i]); // 配列aも入れ替えておく
-    ++c;
-  }
-
-  // この時点でソートに失敗していればNO
-  bool flag = true;
-  REP(i, N) {
-    if(a[i] != i) flag = false;
-  }
-  if(flag == true) {
-    if(N % 2 == c % 2) {
-      cout << "YES" << endl;
-    } else cout << "NO" << endl;
-  } else cout << "NO" << endl;
+  if(res % 2 == N % 2) cout << "YES" << endl;
+  else cout << "NO" << endl;
 }

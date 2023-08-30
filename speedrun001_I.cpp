@@ -34,18 +34,18 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
 int main() {
-  ll N; cin >> N;
+  int N; cin >> N;
   vector<ll> a(N); REP(i, N) cin >> a[i];
-  vector<ll> rui(N + 1);
+  deque<ll> q; int ans = 0; int res = 0;
   REP(i, N) {
-    rui[i + 1] = rui[i] + a[i];
-  }
-  int ans = 0;
-  REP(i, N + 1) {
-    ll t = rui[i] + N;
-    if(binary_search(all(rui), t)) ++ans;
+    q.push_back(a[i]); res += a[i];
+    while(res > N) {
+      res -= q.front(); q.pop_front();
+    }
+    if(res == N) ans++;
   }
   cout << ans << endl;
 }

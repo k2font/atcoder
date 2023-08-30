@@ -34,39 +34,35 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
-// 区間加算にも対応した BIT
-template <class Abel> struct BIT {
-    vector<Abel> dat[2];
-    Abel UNITY_SUM = 0;                     // to be set
-    
-    /* [1, n] */
-    BIT(int n) { init(n); }
-    void init(int n) { for (int iter = 0; iter < 2; ++iter) dat[iter].assign(n + 1, UNITY_SUM); }
-    
-    /* a, b are 1-indexed, [a, b) */
-    inline void sub_add(int p, int a, Abel x) {
-        for (int i = a; i < (int)dat[p].size(); i += i & -i)
-            dat[p][i] = dat[p][i] + x;
+// これを使っていこう
+// 1-indexed
+template <typename T=int>
+struct BIT {
+    const int n;
+    vector<T> v;
+ 
+    BIT(int n): n(n), v(n+1,0) {}
+ 
+    void add(int i, int x) {
+        ++i;
+        while (i <= n) {
+            v[i] += x;
+            i += i & -i;
+        }
     }
-    inline void add(int a, int b, Abel x) {
-        sub_add(0, a, x * -(a - 1)); sub_add(1, a, x); sub_add(0, b, x * (b - 1)); sub_add(1, b, x * (-1));
+    T sum(int i) {
+        ++i;
+        T ret = 0;
+        while (i > 0) {
+            ret += v[i];
+            i -= i & -i;
+        }
+        return ret;
     }
-    
-    /* a is 1-indexed, [a, b) */
-    inline Abel sub_sum(int p, int a) {
-        Abel res = UNITY_SUM;
-        for (int i = a; i > 0; i -= i & -i) res = res + dat[p][i];
-        return res;
-    }
-    inline Abel sum(int a, int b) {
-        return sub_sum(0, b - 1) + sub_sum(1, b - 1) * (b - 1) - sub_sum(0, a - 1) - sub_sum(1, a - 1) * (a - 1);
-    }
-    
-    /* debug */
-    void print() {
-        for (int i = 1; i < (int)dat[0].size(); ++i) cout << sum(i, i + 1) << ",";
-        cout << endl;
+    T sum(int l, int r) {
+        return sum(r) - sum(l-1);
     }
 };
 
@@ -166,14 +162,14 @@ template<class T> struct BiCoef {
 BiCoef<mint> bc; // 初期化
 
 int main() {
-  ll N; cin >> N;
+  bc.init(1010101);
+  int N; cin >> N;
   vector<ll> a(N); REP(i, N) cin >> a[i];
-  BIT<ll> bit(N + 100);
+  BIT<ll> bit(N + 10);
   mint ans = 0;
-  bc.init(1000000);
   REP(i, N) {
-    bit.add(a[i], a[i] + 1, 1);
-    ans += (mint)(a[i] - bit.sum(1, a[i] + 1)) * bc.fact(N - i - 1);
+    ans += (mint)((a[i] - 1) - bit.sum(1, a[i] - 1)) * (mint)bc.fact(N - i - 1);
+    bit.add(a[i], 1);
   }
   cout << ans + 1 << endl;
 }

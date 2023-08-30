@@ -37,17 +37,21 @@ struct edge {
 
 int main() {
   long double X, Y, R; cin >> X >> Y >> R;
-  X = round(X * 10000); Y *= round(Y * 10000); R *= round(R * 10000);
-  ll low = ceil(X - R);
-  ll high = floor(X + R);
-  ll p = 0; ll num = 0;
-  for(int i = low; i <= high; i += 10000){
-    ll idx = i;
-    p = round(sqrt(R * R - ((X - idx) * (X - idx))));
-    ll bottom = ceil(Y - p);
-    ll top = floor(Y + p);
-    bottom /= 10000; top /= 10000;
-    num += ((top - bottom) + 1);
+  R += 1e-14;
+  ll left = ceil(X - R); ll right = floor(X + R);
+  ll ans = 0;
+  for(int i = left; i <= right; ++i) {
+    long double y_p, y_n;
+    long double tmp1, tmp2;
+    long double sq = ((long double)i - X) * ((long double)i - X);
+
+    tmp1 = (long double)Y + sqrtl(R * R - sq);
+    y_p = floor(tmp1);
+
+    tmp2 = (long double)Y - sqrtl(R * R - sq);
+    y_n = ceil(tmp2);
+
+    ans += (y_p - y_n) + 1;
   }
-  cout << num << endl;
+  cout << ans << endl;
 }

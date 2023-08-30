@@ -62,15 +62,11 @@ typedef ModInt<1000000007> mint;
 
 int main() {
   ll N, L; cin >> N >> L;
-  vector<mint> dp(N + 100, 0);
-  dp[0] = 1; dp[1] = 0;
-  if(N < L) {
-    cout << 1 << endl;
-  } else {
-    REP(i, N + 1) {
-      if(i + 1 <= N) dp[i + 1] += dp[i];
-      if(i + L <= N) dp[i + L] += dp[i];
-    }
-    cout << dp[N] << endl;
+  vector<mint> dp(N + N + L); REP(i, N + N + L) dp[i] = 0;
+  dp[0] = 1;
+  REP(i, N + 1) {
+    dp[i + 1] += dp[i];
+    dp[i + L] += dp[i];
   }
+  cout << dp[N] << endl;
 }

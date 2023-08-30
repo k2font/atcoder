@@ -38,23 +38,30 @@ template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
 int main() {
   ll N; cin >> N;
-  vector<ll> A(N); REP(i, N) cin >> A[i];
-  vector<ll> B(N); REP(i, N) cin >> B[i];
-  vector<ll> C(N); REP(i, N) cin >> C[i];
-  ll ans = 0;
-
-  vector<ll> ma(46), mb(46), mc(46);
-  REP(i, N) ma[A[i] % 46]++;
-  REP(i, N) mb[B[i] % 46]++;
-  REP(i, N) mc[C[i] % 46]++;
-
-  for(int i = 0; i < 46; ++i) {
-    for(int k = 0; k < 46; ++k) {
-      for(int m = 0; m < 46; ++m) {
-        if((i + k + m) % 46 == 0) ans += (ll)ma[i] * mb[k] * mc[m];
-      }
-    } 
+  vector<ll> A(46), B(46), C(46);
+  REP(i, N) {
+    ll a; cin >> a;
+    A[(a % 46)]++;
+  }
+  REP(i, N) {
+    ll b; cin >> b;
+    B[(b % 46)]++;
+  }
+  REP(i, N) {
+    ll c; cin >> c;
+    C[(c % 46)]++;
   }
 
+  ll ans = 0;
+  REP(i, 46) {
+    if(A[i] == 0) continue;
+    REP(k, 46) {
+      if(B[k] == 0) continue;
+      REP(j, 46) {
+        if((i + k + j) % 46 > 0) continue;
+        ans += (A[i] * B[k] * C[j]);
+      }
+    }
+  }
   cout << ans << endl;
 }

@@ -96,34 +96,42 @@ struct edge {
   ll to, cost;
 };
 
-vector<vector<edge>> tree;
-vector<ll> dp;
-void dfs(ll pos, ll pre) {
-  dp[pos] = 1;
-  for(auto i : tree[pos]) {
-    if(i.to != pre) {
-      dfs(i.to, pos); // 次の行き先, 直前のノード
-      dp[pos] ^= (dp[i.to] ^ i.cost); // 子より下の子の個数を現在のノードに足し込む
-    }
-  }
-}
-
 int main() {
   int N; cin >> N;
-  tree.resize(N); dp.resize(N + 10, 0);
+  vector<vector<edge>> tree(N);
   REP(i, N - 1) {
-    ll a, b, c; cin >> a >> b >> c;
-    --a; --b;
+    ll a, b, c; cin >> a >> b >> c; --a; --b;
     tree[a].push_back({b, c});
     tree[b].push_back({a, c});
   }
-  dfs(0, -1);
   mint ans = 0;
-  REP(i, N) {
-    ans += (mint)dp[i] * ((mint)N - (mint)dp[i]);
+
+  // part1: 頂点0からすべての頂点へのdistを求める
+  // BFSする
+  vector<ll> dist(N); dist[0] = 0;
+  vector<bool> visited(N, false);
+  queue<ll> q; q.push(0);
+  while(!q.empty()) {
+    auto x = q.front(); q.pop();
+    if(visited[x] == true) continue;
+    visited[x] = true;
+    for(int i = 0; i < tree[x].size(); ++i) {
+      dist[tree[x][i].to] = (dist[x] ^ tree[x][i].cost);
+      q.push(tree[x][i].to);
+    }
   }
 
-  cout << (3^3) << endl;
-  cout << (3^0) << endl;
+  // part2: distを数列とみなし、XOR Sum 4を解く
+  REP(d, 60) {
+    mint p = 0; mint q = 0;
+    REP(k, N) {
+      if((dist[k] >> d) & 1) p += 1;
+      else q += 1;
+    }
+    mint a = ((ll)1 << d);
+    mint tmp = p * q * a;
+    ans += tmp;
+  }
+
   cout << ans << endl;
 }

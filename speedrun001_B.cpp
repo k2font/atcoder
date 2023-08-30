@@ -34,9 +34,10 @@ template<class T> inline bool chmax(T& a, T b) {
 struct edge {
   ll to, cost;
 };
+template <class T> T up(T a, T div) { return (a + div - 1) / div; }
 
 int main() {
   int N; cin >> N;
-  vector<ll> a(N); REP(i, N) cin >> a[i];
-  cout << accumulate(all(a), 0) << endl;
+  vector<int> a(N); REP(i, N) cin >> a[i];
+  cout << accumulate(all(a), 0LL) << endl;
 }
